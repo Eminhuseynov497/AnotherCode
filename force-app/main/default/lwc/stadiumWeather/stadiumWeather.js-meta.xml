@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage, lightning__HomePage">
+            <property name="stadiumName" type="String" label="Stadium Name" default="Camp Nou"/>
+            <property name="coldImageUrl" type="String" label="Cold (&lt; 10°C)" default="/resource/coldImage"/>
+            <property name="coolImageUrl" type="String" label="Cool (10–18°C)" default="/resource/coolImage"/>
+            <property name="warmImageUrl" type="String" label="Warm (18–25°C)" default="/resource/warmImag"/>
+            <property name="hotImageUrl" type="String" label="Hot (25–30°C)" default="/resource/hotimage"/>
+            <property name="veryHotImageUrl" type="String" label="Very Hot (&gt; 30°C)" default="/resource/veryhotimage"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

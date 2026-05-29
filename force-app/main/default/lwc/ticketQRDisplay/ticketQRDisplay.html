@@ -1,0 +1,70 @@
+<template>
+    <lightning-card title="Your Ticket">
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="qr-container">
+                        <img if:true={qrImageUrl} src={qrImageUrl} alt="Ticket QR Code" class="qr-image" />
+                        
+                        <div if:true={showPlaceholder} class="qr-placeholder">
+                            <p>No QR Code</p>
+                            <lightning-button
+                                label="Generate QR Code"
+                                onclick={handleGenerateQR}
+                                variant="brand"
+                                class="slds-m-top_small"
+                            ></lightning-button>
+                        </div>
+                        
+                        <div if:true={isGenerating} class="qr-placeholder">
+                            <lightning-spinner 
+                                size="medium" 
+                                alternative-text="Generating QR Code, please wait">
+                            </lightning-spinner>
+                            <p class="slds-m-top_xx-small">Generating...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="ticket-details">
+                        <h2 class="event-name">{eventName}</h2>
+                        <div class="detail-row">
+                            <span class="label">Section, Row, Seat</span>
+                            <span class="value">{seatLabel}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Status</span>
+                            <span class="value">
+                                <lightning-badge label={statusLabel} variant={statusVariant}></lightning-badge>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Date &amp; Time</span>
+                            <span class="value">{eventDateTime}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Venue</span>
+                            <span class="value">{stadiumName}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button
+                    label="Download QR Code"
+                    variant="brand"
+                    onclick={handleDownload}
+                    disabled={isDownloadDisabled}
+                    class="slds-m-right_small"
+                ></lightning-button>
+                <lightning-button
+                    label="Share"
+                    variant="outline-brand"
+                    onclick={handleShare}
+                    disabled={isDownloadDisabled}
+                ></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

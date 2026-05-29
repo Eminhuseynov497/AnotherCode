@@ -1,0 +1,51 @@
+:host {
+    --slds-c-card-color-background: #f3e5f5;
+    --slds-c-card-color-border: #ce93d8;
+    --slds-c-card-header-color-background: #e1bee7;
+    --slds-c-card-text-color: #4a148c;
+    --slds-c-card-shadow: 0 4px 12px rgba(149, 117, 205, 0.25);
+}
+
+.social-links {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: white;
+    background: linear-gradient(135deg, #b388ff, #7c4dff);
+    box-shadow: 0 4px 10px rgba(179, 136, 255, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(179, 136, 255, 0.6);
+    opacity: 0.95;
+}
+
+.social-icon svg {
+    fill: white;
+}
+
+.social-icon.instagram,
+.social-icon.x,
+.social-icon.facebook,
+.social-icon.linkedin {
+    background: linear-gradient(135deg, #b388ff, #7c4dff);
+}
+
+.social-links p {
+    color: #9c27b0;
+    font-style: italic;
+    opacity: 0.85;
+}

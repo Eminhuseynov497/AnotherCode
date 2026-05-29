@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="Stadium Weather" icon-name="utility:weather">
+        <div if:true={weather} class="slds-var-m-around_medium weather-wrapper">
+            <div class="weather-content">
+                <img src={currentImageUrl} alt={weather.description} 
+                     width="70" height="70" class="weather-icon" />
+                <div class="weather-info">
+                    <h2 class="temperature">{weather.temp}°C</h2>
+                    <p class="description">{weather.description}</p>
+                    <p class="location">{weather.location}</p>
+                    <p class="feels-like">Feels like: {weather.feelsLike}°C</p>
+                </div>
+            </div>
+        </div>
+        <div if:false={weather} class="slds-var-m-around_medium">
+            <p class="slds-text-color_weak">Weather data unavailable</p>
+        </div>
+        <div if:true={error} class="slds-var-m-around_medium slds-text-color_error">
+            Error: {errorMessage}
+        </div>
+    </lightning-card>
+</template>

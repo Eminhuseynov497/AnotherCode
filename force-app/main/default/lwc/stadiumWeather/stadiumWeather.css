@@ -1,0 +1,135 @@
+:host {
+    --bright-navy: #0A2472;
+    --bright-light-blue: #87CEEB;
+
+    --slds-c-card-color-background: #fff8e1;
+    --slds-c-card-header-color-background: #ffe0b2;
+    --slds-c-card-text-color: #bf6f00;
+    --slds-c-card-header-text-color: #bf6f00;
+    --accent: #ffb300;
+    --text-primary: #bf6f00;
+    --text-secondary: #6d4c41;
+    --bg-soft: #fff8e1;
+}
+
+:host(.temp-cold) {
+    --slds-c-card-color-background: #e8eaf6;
+    --slds-c-card-header-color-background: #d1ecf9;
+    --slds-c-card-text-color: #1a237e;
+    --slds-c-card-header-text-color: #1a237e;
+    --accent: #5c6bc0;
+    --text-primary: #1a237e;
+    --text-secondary: #37474f;
+    --bg-soft: #e8eaf6;
+}
+
+:host(.temp-cool) {
+    --slds-c-card-color-background: #e0f2f1;
+    --slds-c-card-header-color-background: #c8e6e0;
+    --slds-c-card-text-color: #004d40;
+    --slds-c-card-header-text-color: #004d40;
+    --accent: #26a69a;
+    --text-primary: #004d40;
+    --text-secondary: #455a64;
+    --bg-soft: #e0f2f1;
+}
+
+:host(.temp-warm) {
+    --slds-c-card-color-background: #fff8e1;
+    --slds-c-card-header-color-background: #ffe0b2;
+    --slds-c-card-text-color: #bf6f00;
+    --slds-c-card-header-text-color: #bf6f00;
+    --accent: #ffb300;
+    --text-primary: #bf6f00;
+    --text-secondary: #6d4c41;
+    --bg-soft: #fff8e1;
+}
+
+:host(.temp-hot) {
+    --slds-c-card-color-background: #fff0e6;
+    --slds-c-card-header-color-background: #ffe0cc;
+    --slds-c-card-text-color: #e65100;
+    --slds-c-card-header-text-color: #e65100;
+    --accent: #ff6e40;
+    --text-primary: #e65100;
+    --text-secondary: #5d4037;
+    --bg-soft: #fff0e6;
+}
+
+:host(.temp-veryhot) {
+    --slds-c-card-color-background: #ffefea;
+    --slds-c-card-header-color-background: #ffd9d9;
+    --slds-c-card-text-color: #b71c1c;
+    --slds-c-card-header-text-color: #b71c1c;
+    --accent: #ff5252;
+    --text-primary: #b71c1c;
+    --text-secondary: #4e342e;
+    --bg-soft: #ffefea;
+}
+
+.weather-wrapper {
+    border-radius: 1rem;
+    padding: 1rem;
+    background: transparent;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    position: relative;
+}
+
+.weather-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+    opacity: 0.6;
+}
+
+.weather-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.weather-icon {
+    object-fit: contain;
+    display: block;
+    border: none;
+    background: none;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.weather-info {
+    flex: 1;
+}
+
+.temperature {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.description {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: capitalize;
+    margin: 4px 0;
+}
+
+.location {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin: 2px 0;
+}
+
+.feels-like {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}

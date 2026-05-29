@@ -1,0 +1,87 @@
+.qr-card {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    min-height: 200px;
+}
+
+.qr-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.qr-placeholder {
+    text-align: center;
+    color: #706e6b;
+}
+
+.qr-placeholder lightning-icon {
+    --sds-c-icon-color-foreground: #706e6b;
+}
+
+.ticket-details {
+    padding: 0.5rem 0;
+}
+
+.event-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #080707;
+    margin-bottom: 0.75rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #f3f2f2;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row .label {
+    color: #706e6b;
+    font-weight: 500;
+}
+
+.detail-row .value {
+    color: #080707;
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+    .qr-container {
+        min-height: 150px;
+        margin-bottom: 1rem;
+    }
+
+    .event-name {
+        font-size: 1rem;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        padding: 0.5rem 0;
+    }
+
+    .detail-row .label {
+        font-size: 0.875rem;
+    }
+
+    .detail-row .value {
+        font-size: 0.875rem;
+    }
+}
