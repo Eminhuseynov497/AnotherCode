@@ -1,0 +1,89 @@
+.tier-badge {
+    background-color: #f4f6f9;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+.progress-container {
+    margin-top: 8px;
+}
+.tier-progress {
+    width: 100%;
+    height: 16px;
+}
+.progress-label {
+    margin-left: 8px;
+    font-size: 0.875rem;
+}
+
+.slds-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.slds-table th, 
+.slds-table td {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal !important;
+    vertical-align: middle;
+}
+
+.slds-table thead th {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Season Passes */
+.slds-table th:nth-child(1), /* Team */
+.slds-table td:nth-child(1) {
+    width: 20%;
+}
+
+.slds-table th:nth-child(2), /* Season */
+.slds-table td:nth-child(2) {
+    width: 15%;
+}
+
+.slds-table th:nth-child(3), /* Section */
+.slds-table td:nth-child(3) {
+    width: 20%;
+}
+
+.slds-table th:nth-child(4), /* Dates */
+.slds-table td:nth-child(4) {
+    width: 30%;
+}
+
+.slds-table th:nth-child(5), /* Status */
+.slds-table td:nth-child(5) {
+    width: 15%;
+}
+
+/* Upcoming Tickets */
+.slds-table th:nth-child(1) { width: 25%; } /* Event */
+.slds-table th:nth-child(2) { width: 15%; } /* Seat */
+.slds-table th:nth-child(3) { width: 20%; } /* Date */
+.slds-table th:nth-child(4) { width: 20%; } /* Stadium */
+.slds-table th:nth-child(5) { width: 20%; } /* Status */
+
+/* Recent Orders */
+.slds-table th:nth-child(1) { width: 20%; } /* Order # */
+.slds-table th:nth-child(2) { width: 25%; } /* Date */
+.slds-table th:nth-child(3) { width: 20%; } /* Amount */
+.slds-table th:nth-child(4) { width: 35%; } /* Status */
+
+/* Loyalty Activity */
+.slds-table th:nth-child(1) { width: 15%; } /* Type */
+.slds-table th:nth-child(2) { width: 15%; } /* Points */
+.slds-table th:nth-child(3) { width: 35%; } /* Reason */
+.slds-table th:nth-child(4) { width: 35%; } /* Date */
+
+@media (max-width: 768px) {
+    .slds-table th, 
+    .slds-table td {
+        font-size: 0.75rem;
+        padding: 6px 4px;
+    }
+}

@@ -1,0 +1,110 @@
+<template>
+    <lightning-card title="Fan Manager" icon-name="standard:user">
+        <div slot="actions" class="actions-row">
+            <template if:true={showSelect}>
+                <lightning-button variant="brand" label="New Fan" onclick={handleNew} class="peach-brand"></lightning-button>
+            </template>
+            <template if:true={showView}>
+                <lightning-button variant="neutral" label="Back" onclick={handleBack} class="peach-neutral"></lightning-button>
+                <lightning-button variant="brand" label="Edit" onclick={handleEdit} class="peach-brand"></lightning-button>
+                <lightning-button variant="brand" label="New Fan" onclick={handleNew} class="peach-brand"></lightning-button>
+            </template>
+            <template if:true={showEdit}>
+                <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="peach-neutral"></lightning-button>
+            </template>
+            <template if:true={showNew}>
+                <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="peach-neutral"></lightning-button>
+            </template>
+        </div>
+
+        <div class="fan-manager-content">
+            <div if:true={showSelect}>
+                <h3 class="slds-text-heading_small section-title">Select a Fan</h3>
+                <template if:true={fans}>
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <template for:each={fans} for:item="fan">
+                            <div key={fan.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                <lightning-card title={fan.Name} icon-name="standard:user" class="fan-card">
+                                    <div class="slds-p-around_medium slds-text-align_center">
+                                        <p>Email: {fan.Email__c}</p>
+                                        <p>Phone: {fan.Phone__c}</p>
+                                        <p>City: {fan.City__c}</p>
+                                        <lightning-button variant="brand" label="View" data-id={fan.Id} onclick={handleFanSelect} class="peach-brand"></lightning-button>
+                                    </div>
+                                </lightning-card>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template if:true={error}>
+                    <div class="slds-text-color_error">Error loading fans: {error}</div>
+                </template>
+            </div>
+
+            <div if:true={showView}>
+                <h3 class="slds-text-heading_small section-title">Fan Information</h3>
+                <lightning-record-view-form record-id={selectedFanId} object-api-name="Fan__c">
+                    <lightning-output-field field-name="First_Name__c"></lightning-output-field>
+                    <lightning-output-field field-name="Last_Name__c"></lightning-output-field>
+                    <lightning-output-field field-name="Email__c"></lightning-output-field>
+                    <lightning-output-field field-name="Phone__c"></lightning-output-field>
+                    <lightning-output-field field-name="Date_of_Birth__c"></lightning-output-field>
+                    <lightning-output-field field-name="City__c"></lightning-output-field>
+                    <lightning-output-field field-name="Favorite_Team__c"></lightning-output-field>
+                    <lightning-output-field field-name="Loyalty_Tier__c"></lightning-output-field>
+                    <lightning-output-field field-name="Loyalty_Points_Balance__c"></lightning-output-field>
+                </lightning-record-view-form>
+            </div>
+
+            <div if:true={showEdit}>
+                <h3 class="slds-text-heading_small section-title">Edit Fan: {selectedFanName}</h3>
+                <lightning-record-edit-form record-id={selectedFanId} object-api-name="Fan__c" onsuccess={handleSave} oncancel={handleCancel}>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="First_Name__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Last_Name__c"></lightning-input-field>
+                        </div>
+                    </div>
+                    <lightning-input-field field-name="Email__c"></lightning-input-field>
+                    <lightning-input-field field-name="Phone__c"></lightning-input-field>
+                    <lightning-input-field field-name="Date_of_Birth__c"></lightning-input-field>
+                    <lightning-input-field field-name="City__c"></lightning-input-field>
+                    <lightning-input-field field-name="Favorite_Team__c"></lightning-input-field>
+                    <lightning-input-field field-name="Loyalty_Tier__c"></lightning-input-field>
+                    <lightning-input-field field-name="Loyalty_Points_Balance__c"></lightning-input-field>
+                    <div class="slds-m-top_medium form-buttons">
+                        <lightning-button variant="brand" type="submit" label="Save Fan" class="peach-brand"></lightning-button>
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="peach-neutral"></lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+
+            <div if:true={showNew}>
+                <h3 class="slds-text-heading_small section-title">New Fan</h3>
+                <lightning-record-edit-form object-api-name="Fan__c" onsuccess={handleSave} oncancel={handleCancel}>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="First_Name__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Last_Name__c"></lightning-input-field>
+                        </div>
+                    </div>
+                    <lightning-input-field field-name="Email__c"></lightning-input-field>
+                    <lightning-input-field field-name="Phone__c"></lightning-input-field>
+                    <lightning-input-field field-name="Date_of_Birth__c"></lightning-input-field>
+                    <lightning-input-field field-name="City__c"></lightning-input-field>
+                    <lightning-input-field field-name="Favorite_Team__c"></lightning-input-field>
+                    <lightning-input-field field-name="Loyalty_Tier__c"></lightning-input-field>
+                    <lightning-input-field field-name="Loyalty_Points_Balance__c"></lightning-input-field>
+                    <div class="slds-m-top_medium form-buttons">
+                        <lightning-button variant="brand" type="submit" label="Create Fan" class="peach-brand"></lightning-button>
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="peach-neutral"></lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </lightning-card>
+</template>

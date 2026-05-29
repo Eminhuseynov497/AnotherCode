@@ -1,0 +1,23 @@
+.container {
+    overflow: hidden;
+    background-color: #e8f5e9;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 300px;
+}
+
+.time-wrapper {
+    color: #1e3a2f;
+    font-weight: 500;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.bar {
+    height: 6px;
+    background-color: #2ecc71;
+    border-radius: 4px;
+    margin-top: 12px;
+}

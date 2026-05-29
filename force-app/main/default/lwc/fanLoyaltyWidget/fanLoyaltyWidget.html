@@ -1,0 +1,91 @@
+<template>
+    <div class="slds-card slds-p-around_medium" style="max-width: 500px;">
+        <div if:true={loading} style="text-align: center; padding: 20px;">
+            <lightning-spinner size="small" variant="brand"></lightning-spinner>
+        </div>
+
+        <div if:false={loading}>
+            <div if:true={error} style="color: red; margin-bottom: 10px;">
+                {error}
+            </div>
+
+            <div if:false={fan.Id}>
+                <p style="color: #666;">No fan data loaded. Please log in as a registered fan.</p>
+            </div>
+
+            <div if:true={fan.Id}>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_2-of-3">
+                        <h2 class="slds-text-heading_medium slds-m-bottom_x-small">{fan.Name}</h2>
+                        <div class="slds-text-body_regular slds-m-bottom_x-small">
+                            <lightning-icon icon-name="standard:user" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Tier: <span class="tier-label {tierClass}">{fan.Loyalty_Tier__c}</span>
+                        </div>
+                        <div class="slds-text-body_small slds-m-bottom_medium">
+                            <lightning-icon icon-name="utility:ribbon" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Points: <strong>{fan.Loyalty_Points_Balance__c}</strong>
+                            <span class="slds-m-left_medium">
+                                <lightning-icon icon-name="utility:dollar" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                Spent: <strong>{fan.Total_Spend__c} €</strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-text-align_right">
+                        <lightning-icon icon-name="standard:user" size="large" class="user-icon"></lightning-icon>
+                    </div>
+                </div>
+
+                <div class="slds-m-bottom_medium">
+                    <div class="slds-text-body_small slds-m-bottom_x-small">
+                        <span>Progress to next tier</span>
+                        <span class="slds-float_right">{progressPercent}%</span>
+                    </div>
+                    <div class="progress-bar-container {tierClass}">
+                        <div class="progress-bar-fill" data-element-id="progressFill"></div>
+                    </div>
+                    <div class="slds-text-body_small slds-m-top_x-small">
+                        <span>{pointsToNext} points needed to reach <strong>{nextTierName}</strong></span>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-gutters slds-m-top_medium">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-text-body_small slds-text-color_weak">Member since</div>
+                        <div class="slds-text-body_regular">{memberSince}</div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-text-body_small slds-text-color_weak">Future events</div>
+                        <div class="slds-text-body_regular">{eventsCount}</div>
+                    </div>
+                </div>
+
+                <lightning-accordion class="slds-m-top_medium">
+                    <lightning-accordion-section label="Recent Purchase Orders">
+                        <ul class="slds-list_dotted slds-m-left_medium">
+                            <template for:each={recentOrders} for:item="order">
+                                <li key={order.Id}>{order.Order_Number__c} - {order.Total_Amount__c} €</li>
+                            </template>
+                            <template if:false={recentOrders.length}><li>No recent orders</li></template>
+                        </ul>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section label="Loyalty Transactions">
+                        <ul class="slds-list_dotted slds-m-left_medium">
+                            <template for:each={loyaltyTransactions} for:item="tx">
+                                <li key={tx.Id}>{tx.Type__c}: {tx.Points__c} pts</li>
+                            </template>
+                            <template if:false={loyaltyTransactions.length}><li>No recent transactions</li></template>
+                        </ul>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section label="Active Season Passes">
+                        <ul class="slds-list_dotted slds-m-left_medium">
+                            <template for:each={activeSeasonPasses} for:item="sp">
+                                <li key={sp.Id}>{sp.Team__r.Name} - {sp.Season__c}</li>
+                            </template>
+                            <template if:false={activeSeasonPasses.length}><li>No active season passes</li></template>
+                        </ul>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </div>
+        </div>
+    </div>
+</template>

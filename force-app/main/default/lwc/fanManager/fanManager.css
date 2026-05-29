@@ -1,0 +1,73 @@
+:host {
+    --peach-light: #fff0e6;
+    --peach-medium: #ffd8bf;
+    --peach-dark: #ffab76;
+    --peach-accent: #ff7f50;
+    --peach-accent-hover: #ff6347;
+    --peach-bg: linear-gradient(135deg, #ffe0cc, #ffccb3);
+    --shadow-soft: 0 8px 20px rgba(255, 160, 122, 0.3);
+}
+
+.fan-manager-content {
+    background: var(--peach-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: var(--shadow-soft);
+    margin: 0.5rem 0;
+}
+
+.section-title {
+    color: #cc5500;
+    border-bottom: 2px solid var(--peach-dark);
+    padding-bottom: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.fan-card {
+    --slds-c-card-color-background: #fffaf5;
+    --slds-c-card-radius-border: 16px;
+    --slds-c-card-shadow: 0 4px 12px rgba(255, 160, 122, 0.25);
+    border: 1px solid var(--peach-medium);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.fan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(255, 105, 50, 0.4);
+}
+
+.actions-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.peach-brand {
+    --slds-c-button-brand-color-background: var(--peach-accent);
+    --slds-c-button-brand-color-background-hover: var(--peach-accent-hover);
+    --slds-c-button-brand-color-border: var(--peach-accent);
+    --slds-c-button-brand-text-color: white;
+    --slds-c-button-radius-border: 8px;
+    font-weight: 600;
+}
+
+.peach-neutral {
+    --slds-c-button-neutral-color-background: var(--peach-light);
+    --slds-c-button-neutral-color-background-hover: var(--peach-medium);
+    --slds-c-button-neutral-color-border: var(--peach-dark);
+    --slds-c-button-neutral-text-color: #cc5500;
+    --slds-c-button-radius-border: 8px;
+    font-weight: 500;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+lightning-card {
+    --slds-c-card-color-background: #fff5ee;
+    --slds-c-card-header-color-background: #ffd6b3;
+    --slds-c-card-radius-border: 20px;
+    --slds-c-card-shadow: 0 6px 18px rgba(255, 140, 0, 0.2);
+}

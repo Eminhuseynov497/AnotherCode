@@ -1,0 +1,66 @@
+<template>
+    <div class="slds-box slds-box_x-small main-container">
+        <div if:true={recordId}>
+            <div class="slds-grid slds-gutters slds-align_center slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-12 slds-text-align_center">
+                    <span class="sport-icon-large">{iconEmoji}</span>
+                </div>
+                <div class="slds-col slds-size_11-of-12">
+                    <h1 class="slds-text-heading_large slds-m-bottom_xx-small">{name}</h1>
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        <lightning-formatted-text value={leagueName}></lightning-formatted-text>
+                    </p>
+                </div>
+            </div>
+
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="6" small-device-size="12">
+                    <div class="slds-box slds-box_x-small slds-theme_shade section-box">
+                        <div class="slds-form-element">
+                            <span class="slds-form-element__label">Icon</span>
+                            <div class="slds-form-element__control">
+                                <span class="slds-text-color_weak">{iconDisplay}</span>
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-top_small">
+                            <span class="slds-form-element__label">Min Age Restriction</span>
+                            <div class="slds-form-element__control">
+                                <span class="slds-badge slds-badge_brand slds-m-top_xx-small">
+                                    {minAge}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-top_small">
+                            <span class="slds-form-element__label">Status</span>
+                            <div class="slds-form-element__control">
+                                <span class="slds-badge slds-badge_{statusVariant}">{statusLabel}</span>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="6" small-device-size="12">
+                    <div class="slds-box slds-box_x-small slds-theme_shade section-box">
+                        <div class="slds-form-element">
+                            <span class="slds-form-element__label">Description</span>
+                            <div class="slds-form-element__control">
+                                <lightning-formatted-text value={description}></lightning-formatted-text>
+                                <template if:true={isDescriptionEmpty}>
+                                    <span class="slds-text-color_weak">No description</span>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button label="Edit" onclick={handleEdit} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                <lightning-button label="Back" onclick={handleBack} variant="neutral"></lightning-button>
+            </div>
+        </div>
+        <div if:false={recordId}>
+            <p class="slds-text-color_weak">No record ID found. Please add this component to a Sport record page.</p>
+        </div>
+    </div>
+</template>

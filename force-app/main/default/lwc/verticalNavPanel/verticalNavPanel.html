@@ -1,0 +1,33 @@
+<template>
+    <button if:false={isOpen} class="menu-button" onclick={togglePanel} aria-label="Открыть меню">
+        <svg class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div if:true={isOpen} class="overlay" onclick={closePanel}></div>
+
+    <div class={panelClass} role="navigation">
+        <div class="panel-header">
+            <button class="close-button" onclick={closePanel}>
+                ✕
+            </button>
+            <span class="header-title">Objects</span>
+        </div>
+        <ul class="list">
+            <template for:each={objects} for:item="obj">
+                <li key={obj.apiName}>
+                    <button class="obj-button" onclick={navigateToObject} data-api-name={obj.apiName}>
+                        {obj.label}
+                    </button>
+                </li>
+            </template>
+        </ul>
+        <div class="panel-footer">
+            <div class="footer-item">Helpline</div>
+            <div class="footer-item">+1 234 567 89 10</div>
+        </div>
+    </div>
+</template>

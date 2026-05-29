@@ -1,0 +1,47 @@
+:host {
+    background: linear-gradient(135deg, #e0f7f1 0%, #c8f0e3 100%);
+    display: block;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+:host {
+    --slds-c-card-color-background: #f0faf5;
+    --slds-c-card-color-border: #a3e4d7;
+    --slds-c-card-header-color-background: #48c9b0;
+    --slds-c-card-header-text-color: white;
+    --slds-c-card-body-padding: 0; /* сохраним компактность */
+    --slds-c-card-shadow: 0 4px 12px rgba(72, 201, 176, 0.15);
+    --slds-c-card-radius: 12px;
+}
+
+:host {
+    --slds-c-input-color-background: #ffffff;
+    --slds-c-input-color-border: #b2dfdb;
+    --slds-c-input-radius: 6px;
+}
+
+:host {
+    --slds-c-button-brand-color-background: #48c9b0;
+    --slds-c-button-brand-color-border: #48c9b0;
+    --slds-c-button-brand-color-background-hover: #3bb99e;
+    --slds-c-button-neutral-color-background: #e8f5f0;
+    --slds-c-button-neutral-color-border: #b2dfdb;
+    --slds-c-button-neutral-color-text: #2c7a6b;
+}
+
+.slds-p-horizontal_medium {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+lightning-button-group {
+    margin-top: 20px;
+}
+
+lightning-card {
+    transition: box-shadow 0.2s ease;
+}
+lightning-card:hover {
+    box-shadow: 0 6px 18px rgba(72, 201, 176, 0.25);
+}

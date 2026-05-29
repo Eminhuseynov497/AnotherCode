@@ -1,0 +1,151 @@
+<template>
+    <lightning-card title="Fan Profile">
+        <template if:true={profile}>
+            <div class="slds-m-around_medium">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <h2 class="slds-text-heading_medium">Loyalty</h2>
+                        <p><strong>Tier:</strong> <span class="tier-badge">{profile.tier}</span></p>
+                        <p><strong>Balance:</strong> {profile.pointsBalance} pts</p>
+                        <p><strong>Lifetime:</strong> {profile.lifetimePoints} pts</p>
+                        <template if:true={profile.nextTier}>
+                            <div class="progress-container">
+                                <p>Progress to {profile.nextTier}</p>
+                                <progress class="tier-progress" value={profile.progressPercent} max="100"></progress>
+                                <span class="progress-label">{profile.progressPercent}%</span>
+                                <p class="slds-text-body_small">{profile.pointsToNextTier} points needed</p>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <h2 class="slds-text-heading_medium">Stats</h2>
+                        <p><strong>Total Spend:</strong> ${profile.totalSpend}</p>
+                        <p><strong>Member Since:</strong> {profile.memberSince}</p>
+                        <p><strong>Events Attended:</strong> {profile.eventsAttended}</p>
+                    </div>
+                </div>
+
+                <div class="slds-m-top_large">
+                    <h2 class="slds-text-heading_medium">Upcoming Tickets</h2>
+                    <template if:true={profile.futureTickets}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Seat</th>
+                                    <th>Date</th>
+                                    <th>Stadium</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={profile.futureTickets} for:item="ticket">
+                                    <tr key={ticket.seatLabel}>
+                                        <td>{ticket.eventName}</td>
+                                        <td>{ticket.seatLabel}</td>
+                                        <td>{ticket.eventDate}</td>
+                                        <td>{ticket.stadium}</td>
+                                        <td>{ticket.status}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={profile.futureTickets}>
+                        <p>No upcoming tickets.</p>
+                    </template>
+                </div>
+
+                <div class="slds-m-top_large">
+                    <h2 class="slds-text-heading_medium">Recent Orders</h2>
+                    <template if:true={profile.recentOrders}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={profile.recentOrders} for:item="order">
+                                    <tr key={order.orderNumber}>
+                                        <td>{order.orderNumber}</td>
+                                        <td>{order.orderDate}</td>
+                                        <td>${order.totalAmount}</td>
+                                        <td>{order.status}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={profile.recentOrders}>
+                        <p>No orders yet.</p>
+                    </template>
+                </div>
+
+                <div class="slds-m-top_large">
+                    <h2 class="slds-text-heading_medium">Loyalty Activity</h2>
+                    <template if:true={profile.recentLoyaltyTx}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Points</th>
+                                    <th>Reason</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={profile.recentLoyaltyTx} for:item="tx">
+                                    <tr key={tx.txDate}>
+                                        <td>{tx.type}</td>
+                                        <td>{tx.points}</td>
+                                        <td>{tx.reason}</td>
+                                        <td>{tx.txDate}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={profile.recentLoyaltyTx}>
+                        <p>No transactions yet.</p>
+                    </template>
+                </div>
+
+                <div class="slds-m-top_large">
+                    <h2 class="slds-text-heading_medium">Season Passes</h2>
+                    <template if:true={profile.activeSeasonPasses}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Season</th>
+                                    <th>Section</th>
+                                    <th>Dates</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={profile.activeSeasonPasses} for:item="pass">
+                                    <tr key={pass.passKey}>
+                                        <td>{pass.teamName}</td>
+                                        <td>{pass.season}</td>
+                                        <td>{pass.section}</td>
+                                        <td>{pass.startDate} - {pass.endDate}</td>
+                                        <td>{pass.status}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={profile.activeSeasonPasses}>
+                        <p>No active passes.</p>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+</template>

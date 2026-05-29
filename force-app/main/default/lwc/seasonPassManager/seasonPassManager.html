@@ -1,0 +1,115 @@
+<template>
+    <lightning-card title="Season Pass Management" icon-name="standard:season">
+        <!-- Выбор фаната (если recordId не передан) -->
+        <template if:true={showFanSelector}>
+            <div class="slds-p-horizontal_medium slds-p-top_small">
+                <lightning-combobox
+                    label="Select Fan"
+                    value={selectedFanId}
+                    options={fanOptions}
+                    onchange={handleFanChange}
+                    placeholder="Choose a fan"
+                    required>
+                </lightning-combobox>
+            </div>
+        </template>
+
+        <template if:false={hasFanSelected}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <p>Please select a fan to manage season passes.</p>
+            </div>
+        </template>
+
+        <template if:true={hasFanSelected}>
+            <template if:true={showSeasonPassSelector}>
+                <div class="slds-p-horizontal_medium slds-p-top_small">
+                    <lightning-combobox 
+                        label="Select Season Pass"
+                        value={selectedPassId}
+                        options={seasonPassOptions}
+                        onchange={handlePassSelection}>
+                    </lightning-combobox>
+                    <lightning-button label="New Season Pass" variant="brand" onclick={handleNewPass} class="slds-m-top_small"></lightning-button>
+                </div>
+            </template>
+
+            <template if:true={showForm}>
+                <div class="slds-p-around_medium">
+                    <lightning-record-edit-form
+                        object-api-name="Season_Pass__c"
+                        record-id={editingPassId}
+                        onsuccess={handleSaveSuccess}
+                        onerror={handleSaveError}>
+                        <lightning-messages></lightning-messages>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Team__c" value={teamId} onchange={handleTeamChange} required></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Stadium_Section__c" value={sectionId} required></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Season__c" required></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Payment_Plan__c" required></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Start_Date__c" required></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="End_Date__c" required></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Preferred_Row__c"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Preferred_Seats__c"></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Auto_Renew__c"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Status__c"></lightning-input-field>
+                            </div>
+                        </div>
+                        <lightning-button-group class="slds-m-top_medium">
+                            <lightning-button label="Save" variant="brand" type="submit"></lightning-button>
+                            <lightning-button label="Cancel" variant="neutral" onclick={handleCancelForm}></lightning-button>
+                        </lightning-button-group>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
+            <template if:true={showDetails}>
+                <div class="slds-p-around_medium">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-3"><strong>Team:</strong> {selectedPassTeamName}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Section:</strong> {selectedPassSectionName}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Season:</strong> {selectedPass.Season__c}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Start Date:</strong> {formattedStartDate}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>End Date:</strong> {formattedEndDate}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Price:</strong> {formattedPrice}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Payment Plan:</strong> {selectedPass.Payment_Plan__c}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Status:</strong> {selectedPass.Status__c}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Auto Renew:</strong> {autoRenewText}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Preferred Row:</strong> {selectedPass.Preferred_Row__c}</div>
+                        <div class="slds-col slds-size_1-of-3"><strong>Preferred Seats:</strong> {selectedPass.Preferred_Seats__c}</div>
+                    </div>
+                    <div class="slds-m-top_medium">
+                        <lightning-button label="Edit" variant="brand" onclick={handleEdit} class="slds-m-right_small"></lightning-button>
+                        <lightning-button label="New Season Pass" variant="neutral" onclick={handleNewPass}></lightning-button>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

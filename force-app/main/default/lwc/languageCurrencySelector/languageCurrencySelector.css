@@ -1,0 +1,90 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: #eafaf1;
+    border-radius: 0.5rem;
+    color: #1e3a2f;
+    border: 1px solid #b6e0cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-weight: 500;
+    color: #2a4d3e;
+    white-space: nowrap;
+}
+
+lightning-combobox {
+    --sds-c-combobox-color-background: #ffffff;
+    --sds-c-combobox-text-color: #1e3a2f;
+    --sds-c-combobox-border-color: #b6e0cc;
+    --sds-c-combobox-border-color-hover: #88c9a8;
+    --sds-c-combobox-color-background-hover: #f0faf4;
+    --sds-c-combobox-color-background-focus: #ffffff;
+    --sds-c-combobox-text-color-focus: #1e3a2f;
+    --sds-c-combobox-border-color-focus: #38b27c;
+    --sds-c-combobox-border-radius: 4px;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #d5f0e2;
+    color: #2a4d3e;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.social-icon svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.social-icon:hover {
+    background: #b6e0cc;
+    color: #1a3328;
+    transform: scale(1.05);
+}
+
+@media (max-width: 640px) {
+    .container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .controls {
+        justify-content: center;
+    }
+    .social-links {
+        margin-left: 0;
+        justify-content: center;
+    }
+}

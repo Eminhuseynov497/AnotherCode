@@ -1,0 +1,384 @@
+:host {
+  /* Горчичная палитра */
+  --section-card-bg: #fdfaf5;
+  --section-card-border: #e8dcc8;
+  --section-card-shadow: 0 1px 4px rgba(120, 90, 30, 0.05);
+  --section-card-hover-shadow: 0 4px 12px rgba(212, 168, 67, 0.15);
+
+  --text-primary: #3f331e;
+  --text-secondary: #635433;
+  --text-muted: #a59379;
+
+  --badge-bg: #ede3d4;
+  --badge-text: #635433;
+
+  --price-color: #c49b3b;
+
+  --seat-bg: #ffffff;
+  --seat-border: #d6cdc0;
+  --seat-available-bg: #fcf6ec;
+  --seat-available-border: #dcc29a;
+  --seat-available-text: #3f331e;
+
+  --seat-selected-bg: #c49b3b;
+  --seat-selected-border: #a8832e;
+  --seat-selected-text: #ffffff;
+
+  --cart-bg: #fcf9f5;
+  --cart-border: #e3d5c4;
+  --cart-divider: #f5ede5;
+  --cart-total-color: #3f331e;
+
+  --timer-bg: #fdf3e5;
+  --timer-border: #eac08e;
+  --timer-text: #7a5a3c;
+
+  --error-bg: #fef0ec;
+  --error-border: #f0baae;
+  --error-text: #a3402c;
+}
+
+/* ===== КАРТОЧКА СЕКЦИИ — ЧУТЬ БОЛЬШЕ ===== */
+.section-card {
+  background: var(--section-card-bg);
+  border: 1px solid var(--section-card-border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  box-shadow: var(--section-card-shadow);
+  transition: all 0.2s ease;
+  
+  /* Горизонтальное расположение всех элементов */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  min-height: 3.2rem;
+}
+
+.section-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--section-card-hover-shadow);
+  border-color: var(--price-color);
+}
+
+.section-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  max-width: 90px;
+}
+
+.section-card .slds-badge {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  font-size: 10px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.section-card .stats {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.section-card .stats .price {
+  color: var(--price-color);
+  font-weight: 600;
+}
+
+/* ===== КНОПКА «SELECT» — ЧУТЬ БОЛЬШЕ ===== */
+.select-seats-btn {
+  width: auto !important;
+  min-width: 60px !important;
+  max-width: 100% !important;
+
+  padding: 0.2rem 0.6rem !important;
+  min-height: 1.8rem !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1.1 !important;
+
+  --sds-c-button-neutral-color-background: #e8d5b0;
+  --sds-c-button-neutral-color-background-hover: #ddc599;
+  --sds-c-button-neutral-text-color: #3f331e;
+  --sds-c-button-neutral-color-border: #d6c5a8;
+
+  border-radius: 6px;
+  transition: none !important;
+}
+
+.select-seats-btn:hover {
+  background: #ddc599 !important;
+  border-color: var(--price-color) !important;
+}
+
+/* ===== КНОПКА RESERVE — БИРЮЗОВАЯ, БЕЗ ГРАДИЕНТА ===== */
+.reserve-btn {
+  --sds-c-button-brand-color-background: #008080 !important;
+  --sds-c-button-brand-color-background-hover: #006666 !important;
+  --sds-c-button-brand-text-color: #ffffff !important;
+
+  /* Сплошной цвет, без градиента */
+  background: #008080 !important;
+  
+  /* Без тени и выделения */
+  box-shadow: none !important;
+  border: 1px solid #006666 !important;
+
+  width: auto !important;
+  min-width: 80px !important;
+  padding: 0.2rem 0.8rem !important;
+  min-height: 1.6rem !important;
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  border-radius: 4px;
+}
+
+.reserve-btn:hover {
+  background: #006666 !important;
+  box-shadow: none !important;
+}
+
+/* ===== КНОПКА REFRESH ===== */
+.refresh-btn {
+  --sds-c-button-neutral-color-border: #d6c5a8 !important;
+  --sds-c-button-neutral-color-background: transparent !important;
+  --sds-c-button-neutral-text-color: #635433 !important;
+
+  width: auto !important;
+  min-width: 80px !important;
+  padding: 0.2rem 0.8rem !important;
+  min-height: 1.6rem !important;
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  border-color: #d6c5a8 !important;
+}
+
+.refresh-btn:hover {
+  background: #f5ede5 !important;
+  border-color: var(--price-color) !important;
+}
+
+/* ===== СЕТКА МЕСТ ===== */
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.row-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.row-label {
+  font-weight: 600;
+  font-size: 9px;
+  color: var(--text-muted);
+  min-width: 24px;
+}
+
+.seat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.seat {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--seat-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  background: var(--seat-bg);
+}
+
+.seat:hover:not(.reserved):not(.sold):not(.checked-in) {
+  transform: scale(1.05);
+  border-color: var(--price-color);
+}
+
+.seat.available {
+  background: var(--seat-available-bg);
+  border-color: var(--seat-available-border);
+  color: var(--seat-available-text);
+}
+
+.seat.reserved {
+  background: #f0e8dd;
+  border-color: #d6c5b4;
+  color: #8a7a66;
+  cursor: not-allowed;
+}
+
+.seat.sold {
+  background: #f5f0ea;
+  border-color: #d6cbc2;
+  color: #b0a090;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.seat.selected {
+  background: var(--seat-selected-bg);
+  border-color: var(--seat-selected-border);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.seat.checked-in {
+  background: #e8ede0;
+  border-color: #c5ceb0;
+  color: #6f7a60;
+  cursor: not-allowed;
+}
+
+/* ===== КОРЗИНА ===== */
+.cart-summary {
+  background: var(--cart-bg);
+  border: 1px solid var(--cart-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--cart-divider);
+  font-size: 12px;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 2px solid var(--cart-divider);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--cart-total-color);
+}
+
+.cart-total .amount {
+  color: var(--price-color);
+}
+
+.reserve-timer {
+  display: inline-block;
+  background: var(--timer-bg);
+  border: 1px solid var(--timer-border);
+  color: var(--timer-text);
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ===== БЛОК КНОПОК В КОРЗИНЕ ===== */
+.action-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* ===== ГОРИЗОНТАЛЬНАЯ СТРОКА СЕКЦИЙ ===== */
+.section-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.section-grid::-webkit-scrollbar {
+  height: 3px;
+}
+.section-grid::-webkit-scrollbar-thumb {
+  background: var(--price-color);
+  border-radius: 4px;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 768px) {
+  .section-card {
+    padding: 6px 10px;
+    min-height: 2.8rem;
+    gap: 6px;
+  }
+  .section-card h3 {
+    font-size: 12px;
+    max-width: 60px;
+  }
+  .section-card .slds-badge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+  .section-card .stats {
+    font-size: 10px;
+    gap: 4px;
+  }
+  .select-seats-btn {
+    font-size: 0.65rem !important;
+    min-width: 50px !important;
+    padding: 0.15rem 0.4rem !important;
+    min-height: 1.4rem !important;
+  }
+  .reserve-btn, .refresh-btn {
+    min-width: 60px !important;
+    padding: 0.15rem 0.6rem !important;
+    font-size: 0.65rem !important;
+    min-height: 1.4rem !important;
+  }
+  .seat {
+    width: 20px;
+    height: 20px;
+    font-size: 7px;
+  }
+  .row-label {
+    min-width: 20px;
+    font-size: 8px;
+  }
+  .cart-summary {
+    padding: 4px 8px;
+  }
+  .cart-item {
+    font-size: 10px;
+  }
+  .cart-total {
+    font-size: 11px;
+  }
+}

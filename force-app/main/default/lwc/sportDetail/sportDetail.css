@@ -1,0 +1,67 @@
+:host {
+    display: block;
+}
+
+.transparent-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.5rem;
+}
+
+.slds-box {
+    background: var(--lwc-colorBackground) !important;
+    border: 1px solid var(--lwc-colorBorder) !important;
+    border-radius: 0.75rem;
+}
+
+.slds-theme_shade {
+    background: var(--lwc-colorBackgroundShade) !important;
+    border: 1px solid var(--lwc-colorBorderShade) !important;
+}
+
+.slds-text-heading_large {
+    font-weight: 600;
+    color: var(--lwc-colorTextDefault);
+}
+
+.slds-form-element__label {
+    color: var(--lwc-colorTextLabel);
+}
+
+.slds-text-color_weak {
+    color: var(--lwc-colorTextWeak);
+}
+
+.sport-icon-large {
+    font-size: 2.5rem;
+    display: inline-block;
+    line-height: 1;
+}
+
+.slds-badge {
+    --sds-c-badge-color-background: var(--lwc-colorBackground);
+    --sds-c-badge-color-border: var(--lwc-colorBorder);
+    --sds-c-badge-color-text: var(--lwc-colorTextDefault);
+}
+
+.slds-badge_brand {
+    --sds-c-badge-color-background: var(--lwc-colorBrand);
+    --sds-c-badge-color-text: var(--lwc-colorTextInverse);
+}
+
+.slds-badge_success {
+    --sds-c-badge-color-background: var(--lwc-colorSuccess);
+    --sds-c-badge-color-text: var(--lwc-colorTextInverse);
+}
+
+.slds-badge_warning {
+    --sds-c-badge-color-background: var(--lwc-colorWarning);
+    --sds-c-badge-color-text: var(--lwc-colorTextInverse);
+}
+
+@media (max-width: 768px) {
+    .slds-box {
+        padding: 0.75rem;
+    }
+}

@@ -1,0 +1,98 @@
+<template>
+  <lightning-card title="Select Your Seats">
+    <div class="slds-p-around_x-small">
+      <!-- Ошибка -->
+      <template if:true={errorMessage}>
+        <div class="slds-box slds-box_alert slds-theme_alert-texture slds-text-color_error slds-m-bottom_x-small">
+          <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+          <span>{errorMessage}</span>
+        </div>
+      </template>
+
+      <!-- Спиннер загрузки -->
+      <template if:true={loading}>
+        <lightning-spinner alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
+      </template>
+
+      <!-- Секции — горизонтальная строка -->
+      <template if:true={sections.length}>
+        <div class="section-grid slds-m-bottom_x-small">
+          <template for:each={sections} for:item="section">
+            <div key={section.sectionId} class="slds-p-around_xx-small" style="flex-shrink: 0;">
+              <div class="section-card">
+                <h3>{section.name}</h3>
+                <span class="slds-badge">{section.category}</span>
+                <div class="stats">
+                  <span>{section.availableCount}</span>
+                  <span class="price">{section.formattedStartingPrice}</span>
+                </div>
+                <lightning-button
+                  variant="neutral"
+                  label="Select"
+                  class="select-seats-btn"
+                  onclick={handleSectionClick}
+                  data-id={section.sectionId}
+                ></lightning-button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Сетка мест выбранной секции -->
+      <template if:true={selectedSectionId}>
+        <div class="slds-m-top_x-small">
+          <h2 class="slds-text-heading_small slds-m-bottom_x-small">Section: {selectedSectionName}</h2>
+          <div class="seat-grid">
+            <template for:each={seatsByRow} for:item="rowObj">
+              <div key={rowObj.row} class="row-container">
+                <span class="row-label">Row {rowObj.row}</span>
+                <div class="seat-row">
+                  <template for:each={rowObj.seats} for:item="seat">
+                    <div key={seat.ticketId}
+                         class={seat.cssClass}
+                         data-id={seat.ticketId}
+                         onclick={handleSeatClick}
+                         ondblclick={handleSeatDblClick}>
+                      {seat.seat}
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Корзина -->
+      <template if:true={cartSeats.length}>
+        <div class="cart-summary">
+          <div class="slds-m-bottom_xx-small slds-text-heading_small">
+            Your Selection ({cartSeats.length}/6)
+          </div>
+          <template for:each={cartSeats} for:item="cs">
+            <div key={cs.ticketId} class="cart-item">
+              <span>{cs.label} – {cs.formattedPrice}</span>
+              <lightning-button-icon icon-name="utility:close" variant="bare" onclick={removeFromCart} data-id={cs.ticketId}></lightning-button-icon>
+            </div>
+          </template>
+          <div class="cart-total">
+            <span>Total</span>
+            <span class="amount">{formattedTotalPrice}</span>
+          </div>
+          <template if:true={isReserved}>
+            <div class="reserve-timer">Reserved until {reservationEndTime}</div>
+          </template>
+
+          <!-- Кнопки Reserve (бирюзовая) и Refresh -->
+          <div class="action-buttons-container">
+            <lightning-button variant="brand" label="Reserve" onclick={handleReserve} disabled={reserveDisabled}
+                              class="reserve-btn"></lightning-button>
+            <lightning-button variant="neutral" label="Refresh" onclick={handleRefresh}
+                              class="refresh-btn"></lightning-button>
+          </div>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

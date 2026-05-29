@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Hot Events" icon-name="standard:event">
+        <div class="ticker-container">
+            <div class="ticker-track">
+                <template for:each={displayEvents} for:item="event">
+                    <div key={event.uniqueKey} class="event-card">
+                        <div class="event-info">
+                            <span class="event-name">{event.Name}</span>
+                            <span class="event-date">{event.formattedDate}</span>
+                            <span class="event-status">{event.Status__c}</span>
+                            <span class="event-occupancy">{event.Occupancy_Percent__c}% filled</span>
+                        </div>
+                        <lightning-button 
+                            label="Buy" 
+                            variant="brand" 
+                            onclick={handleBuy} 
+                            data-id={event.Id} 
+                            class="buy-btn">
+                        </lightning-button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
