@@ -9,22 +9,21 @@ public with sharing class RewardService {
             ORDER BY Points_Cost__c ASC
         ];
     }
-    
+
     @AuraEnabled(cacheable=false)
     public static Decimal getFanBalance(Id fanId) {
         try {
             if (fanId == null) {
                 throw new AuraHandledException('Fan ID is required');
             }
-            
+
             Fan__c fan = [
                 SELECT Loyalty_Points_Balance__c
                 FROM Fan__c
                 WHERE Id = :fanId
                 LIMIT 1
             ];
-            
-            // Return 0 if the field is null, otherwise return the actual value
+
             return fan.Loyalty_Points_Balance__c != null ? fan.Loyalty_Points_Balance__c : 0;
         } catch (QueryException e) {
             throw new AuraHandledException('Fan record not found: ' + e.getMessage());
@@ -32,7 +31,7 @@ public with sharing class RewardService {
             throw new AuraHandledException('Error retrieving fan balance: ' + e.getMessage());
         }
     }
-    
+
     @AuraEnabled
     public static void redeemReward(Id fanId, Id rewardId) {
         Reward__c reward = [
@@ -41,7 +40,7 @@ public with sharing class RewardService {
             WHERE Id = :rewardId AND Is_Active__c = true
             LIMIT 1
         ];
-        
+
         if (reward.Stock_Quantity__c != null && reward.Stock_Quantity__c <= 0) {
             throw new AuraHandledException('Вознаграждение закончилось');
         }
@@ -52,19 +51,19 @@ public with sharing class RewardService {
             WHERE Id = :fanId
             FOR UPDATE
         ];
-        
+
         if (fan.Loyalty_Points_Balance__c < reward.Points_Cost__c) {
             throw new AuraHandledException('Недостаточно баллов');
         }
 
         fan.Loyalty_Points_Balance__c -= reward.Points_Cost__c;
         update fan;
-        
+
         if (reward.Stock_Quantity__c != null) {
             reward.Stock_Quantity__c -= 1;
             update reward;
         }
-        
+
         Reward_Redemption__c redemption = new Reward_Redemption__c(
             Fan__c = fanId,
             Reward__c = rewardId,
@@ -74,7 +73,7 @@ public with sharing class RewardService {
         );
         insert redemption;
     }
-    
+
     @AuraEnabled(cacheable=true)
     public static List<Reward_Redemption__c> getRedemptionHistory(Id fanId) {
         return [

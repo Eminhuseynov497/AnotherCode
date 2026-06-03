@@ -1,5 +1,5 @@
 public with sharing class TeamSocialService {
-    
+
     @AuraEnabled(cacheable=true)
     public static SocialLinksResult getSocialLinksByTeamId(Id teamId) {
         Team__c team = [SELECT Name FROM Team__c WHERE Id = :teamId LIMIT 1];
@@ -12,11 +12,11 @@ public with sharing class TeamSocialService {
         result.facebook = links.get('facebook');
         return result;
     }
-    
+
     private static Map<String, String> getSocialLinksByName(String teamName) {
         Map<String, String> links = new Map<String, String>();
         String key = teamName.trim().toLowerCase();
-        
+
         Map<String, Map<String, String>> mockData = new Map<String, Map<String, String>>{
             'real madrid' => new Map<String, String>{
                 'instagram' => 'https://www.instagram.com/realmadrid',
@@ -39,7 +39,7 @@ public with sharing class TeamSocialService {
                 'facebook'  => 'https://www.facebook.com/manchesterunited'
             }
         };
-        
+
         if (mockData.containsKey(key)) {
             links = mockData.get(key);
         } else {

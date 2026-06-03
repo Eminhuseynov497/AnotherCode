@@ -22,7 +22,7 @@
     border-collapse: collapse;
 }
 
-.slds-table th, 
+.slds-table th,
 .slds-table td {
     word-break: break-word;
     overflow-wrap: break-word;
@@ -35,53 +35,49 @@
     font-size: 0.875rem;
 }
 
-/* Season Passes */
-.slds-table th:nth-child(1), /* Team */
+.slds-table th:nth-child(1),
 .slds-table td:nth-child(1) {
     width: 20%;
 }
 
-.slds-table th:nth-child(2), /* Season */
+.slds-table th:nth-child(2),
 .slds-table td:nth-child(2) {
     width: 15%;
 }
 
-.slds-table th:nth-child(3), /* Section */
+.slds-table th:nth-child(3),
 .slds-table td:nth-child(3) {
     width: 20%;
 }
 
-.slds-table th:nth-child(4), /* Dates */
+.slds-table th:nth-child(4),
 .slds-table td:nth-child(4) {
     width: 30%;
 }
 
-.slds-table th:nth-child(5), /* Status */
+.slds-table th:nth-child(5),
 .slds-table td:nth-child(5) {
     width: 15%;
 }
 
-/* Upcoming Tickets */
-.slds-table th:nth-child(1) { width: 25%; } /* Event */
-.slds-table th:nth-child(2) { width: 15%; } /* Seat */
-.slds-table th:nth-child(3) { width: 20%; } /* Date */
-.slds-table th:nth-child(4) { width: 20%; } /* Stadium */
-.slds-table th:nth-child(5) { width: 20%; } /* Status */
+.slds-table th:nth-child(1) { width: 25%; }
+.slds-table th:nth-child(2) { width: 15%; }
+.slds-table th:nth-child(3) { width: 20%; }
+.slds-table th:nth-child(4) { width: 20%; }
+.slds-table th:nth-child(5) { width: 20%; }
 
-/* Recent Orders */
-.slds-table th:nth-child(1) { width: 20%; } /* Order # */
-.slds-table th:nth-child(2) { width: 25%; } /* Date */
-.slds-table th:nth-child(3) { width: 20%; } /* Amount */
-.slds-table th:nth-child(4) { width: 35%; } /* Status */
+.slds-table th:nth-child(1) { width: 20%; }
+.slds-table th:nth-child(2) { width: 25%; }
+.slds-table th:nth-child(3) { width: 20%; }
+.slds-table th:nth-child(4) { width: 35%; }
 
-/* Loyalty Activity */
-.slds-table th:nth-child(1) { width: 15%; } /* Type */
-.slds-table th:nth-child(2) { width: 15%; } /* Points */
-.slds-table th:nth-child(3) { width: 35%; } /* Reason */
-.slds-table th:nth-child(4) { width: 35%; } /* Date */
+.slds-table th:nth-child(1) { width: 15%; }
+.slds-table th:nth-child(2) { width: 15%; }
+.slds-table th:nth-child(3) { width: 35%; }
+.slds-table th:nth-child(4) { width: 35%; }
 
 @media (max-width: 768px) {
-    .slds-table th, 
+    .slds-table th,
     .slds-table td {
         font-size: 0.75rem;
         padding: 6px 4px;

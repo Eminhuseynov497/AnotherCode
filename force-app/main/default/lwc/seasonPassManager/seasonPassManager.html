@@ -1,6 +1,5 @@
 <template>
     <lightning-card title="Season Pass Management" icon-name="standard:season">
-        <!-- Выбор фаната (если recordId не передан) -->
         <template if:true={showFanSelector}>
             <div class="slds-p-horizontal_medium slds-p-top_small">
                 <lightning-combobox
@@ -23,7 +22,7 @@
         <template if:true={hasFanSelected}>
             <template if:true={showSeasonPassSelector}>
                 <div class="slds-p-horizontal_medium slds-p-top_small">
-                    <lightning-combobox 
+                    <lightning-combobox
                         label="Select Season Pass"
                         value={selectedPassId}
                         options={seasonPassOptions}

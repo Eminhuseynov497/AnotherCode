@@ -18,14 +18,6 @@ public with sharing class DynamicPricingService {
         'Platinum' => 0.15
     };
 
-
-    /**
-     * Calculate dynamic price for a single ticket.
-     * @param ticket
-     * @param event
-     * @param sectionSoldPercent
-     * @return Decimal dynamic price
-     */
     public static Decimal calculateTicketPrice(Ticket__c ticket, Sport_Event__c event, Decimal sectionSoldPercent) {
         if (ticket == null || event == null) return 0.0;
         Decimal base = ticket.Base_Price__c != null ? ticket.Base_Price__c : 0;

@@ -8,7 +8,6 @@ export default class SfAiAgent extends LightningElement {
     @track inputText = '';
     msgIdCounter = 0;
 
-    // SVG path data for each icon (Material / custom paths)
     quickActions = [
         {
             id: 'q1', label: 'Fetch records',
@@ -142,7 +141,6 @@ export default class SfAiAgent extends LightningElement {
         { id: 'c1', label: '👤 My User Info',          prompt: 'Who am I? Show my user info' },
         { id: 'c2', label: '📋 Opportunity fields',    prompt: 'Show all fields on the Opportunity object with their data types' },
 
-        // ── ARENAHUB: Метаданные объектов ──
         { id: 'a7',  label: '🧑‍🤝‍🧑 Fan fields',     prompt: 'Show all fields on the Fan__c object with their data types' },
         { id: 'a8',  label: '🎟️ Ticket fields',         prompt: 'Show all fields on the Ticket__c object with their data types' },
         { id: 'a9',  label: '📅 Event fields',           prompt: 'Show all fields on the Sport_Event__c object with their data types' },
@@ -154,14 +152,12 @@ export default class SfAiAgent extends LightningElement {
         { id: 'a15', label: '⚽ Team fields',             prompt: 'Show all fields on the Team__c object with their data types' },
         { id: 'a16', label: '🏷️ Section fields',         prompt: 'Show all fields on the Stadium_Section__c object with their data types' },
 
-        // ── ARENAHUB: Picklist-значения ──
         { id: 'a17', label: '🎭 Event Types',            prompt: 'Show picklist values for Sport_Event__c.Event_Type__c' },
         { id: 'a18', label: '📌 Ticket Statuses',        prompt: 'Show picklist values for Ticket__c.Status__c' },
         { id: 'a19', label: '💳 Payment Methods',        prompt: 'Show picklist values for Purchase_Order__c.Payment_Method__c' },
         { id: 'a20', label: '🏅 Loyalty Tiers',          prompt: 'Show picklist values for Fan__c.Loyalty_Tier__c' },
         { id: 'a21', label: '🔄 Pass Statuses',          prompt: 'Show picklist values for Season_Pass__c.Status__c' },
 
-        // ── ARENAHUB: Данные и отчёты ──
         { id: 'a22', label: '👥 Gold Fans',              prompt: 'Show me all Gold tier Fans with Name, Email, Loyalty_Points_Balance__c limit 5' },
         { id: 'a23', label: '💎 Platinum Fans',          prompt: 'Show me all Platinum tier Fans with Name, Email, Total_Spend__c limit 5' },
         { id: 'a24', label: '🔥 Sold Out Events',        prompt: 'Show me all Sport Events with Status = \'Sold Out\' and Total_Tickets__c > 100 limit 5' },
@@ -172,7 +168,6 @@ export default class SfAiAgent extends LightningElement {
         { id: 'a29', label: '🎂 Birthday Fans',          prompt: 'Show me Fans whose Date_of_Birth__c is in the next 7 days, with Name, Email, Loyalty_Tier__c' },
         { id: 'a30', label: '🔄 Recent Transactions',    prompt: 'Show me the 10 most recent Loyalty_Transaction__c records with Fan__r.Name, Type__c, Points__c, Reason__c' },
 
-        // ── ARENAHUB: Бизнес-логика и помощь ──
         { id: 'a31', label: '⚙️ Dynamic Pricing',       prompt: 'Explain the dynamic pricing formula: Dynamic Price = Base Price * Event Multiplier * Demand Factor * Time Factor' },
         { id: 'a32', label: '🎯 Loyalty Upgrade Rules',  prompt: 'How does the loyalty tier upgrade work in ArenaHub? When does a fan move from Silver to Gold?' },
         { id: 'a33', label: '🪑 Season Pass Reservation', prompt: 'How does season pass seat reservation work for future home events?' },
@@ -252,7 +247,6 @@ export default class SfAiAgent extends LightningElement {
     }
 
     scrollToBottom() {
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(() => {
             const c = this.template.querySelector('.messages');
             if (c) c.scrollTop = c.scrollHeight;
@@ -263,13 +257,11 @@ export default class SfAiAgent extends LightningElement {
         this.template.querySelectorAll('.msg-content').forEach(el => {
             const msg = this.messages.find(m => m.id === el.dataset.id);
             if (msg && msg.isHtml && el.innerHTML !== msg.html) {
-                // eslint-disable-next-line @lwc/lwc/no-inner-html
                 el.innerHTML = msg.html;
             }
         });
     }
 
-    // ── Markdown parser (unchanged from previous version) ─────────────────────────
     parseMessageContent(role, content) {
         if (role !== 'ai' || !content) return { isHtml: false, html: '' };
         const hasCode  = /```/.test(content);

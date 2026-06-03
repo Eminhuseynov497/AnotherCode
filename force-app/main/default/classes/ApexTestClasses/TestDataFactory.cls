@@ -6,7 +6,7 @@ public class TestDataFactory {
         insert sport;
         return sport;
     }
-    
+
     public static League__c createLeague(String name, String country, String season, Id sportId) {
         League__c league = new League__c(
             Name = name,
@@ -18,7 +18,7 @@ public class TestDataFactory {
         insert league;
         return league;
     }
-    
+
     public static Stadium__c createStadium(String name) {
         Stadium__c stadium = new Stadium__c(
             Name = name,
@@ -31,7 +31,7 @@ public class TestDataFactory {
         insert stadium;
         return stadium;
     }
-    
+
     public static Stadium_Section__c createSection(Id stadiumId, String name, Integer rowCount, Integer seatsPerRow, Decimal basePrice, String category) {
         Stadium_Section__c section = new Stadium_Section__c(
             Name = name,
@@ -47,7 +47,7 @@ public class TestDataFactory {
         insert section;
         return section;
     }
-    
+
     public static Team__c createTeam(String name, Id leagueId, Id stadiumId) {
         Team__c team = new Team__c(
             Name = name,
@@ -58,9 +58,9 @@ public class TestDataFactory {
         insert team;
         return team;
     }
-    
-    public static Sport_Event__c createEvent(Id stadiumId, Id homeTeamId, Id awayTeamId, Id leagueId, 
-                                              String season, DateTime eventDateTime, String eventType, 
+
+    public static Sport_Event__c createEvent(Id stadiumId, Id homeTeamId, Id awayTeamId, Id leagueId,
+                                              String season, DateTime eventDateTime, String eventType,
                                               Decimal priceMultiplier, String status) {
         Sport_Event__c ev = new Sport_Event__c(
             Stadium__c = stadiumId,
@@ -77,8 +77,8 @@ public class TestDataFactory {
         insert ev;
         return ev;
     }
-    
-    public static Ticket__c createTicket(Id eventId, Id sectionId, Integer rowNumber, Integer seatNumber, 
+
+    public static Ticket__c createTicket(Id eventId, Id sectionId, Integer rowNumber, Integer seatNumber,
                                          String status, Decimal basePrice) {
         Ticket__c ticket = new Ticket__c(
             Sport_Event__c = eventId,
@@ -93,7 +93,7 @@ public class TestDataFactory {
         insert ticket;
         return ticket;
     }
-    
+
     public static List<Ticket__c> generateTicketsForEvent(Id eventId, Id sectionId, Integer rowCount, Integer seatsPerRow, Decimal basePrice) {
         List<Ticket__c> tickets = new List<Ticket__c>();
         for (Integer r = 1; r <= rowCount; r++) {
@@ -114,8 +114,8 @@ public class TestDataFactory {
         insert tickets;
         return tickets;
     }
-    
-    public static Fan__c createFan(String email, String firstName, String lastName, String loyaltyTier, 
+
+    public static Fan__c createFan(String email, String firstName, String lastName, String loyaltyTier,
                                    Integer loyaltyPoints, Integer lifetimePoints) {
         Fan__c fan = new Fan__c(
             First_Name__c = firstName,
@@ -133,7 +133,7 @@ public class TestDataFactory {
         return fan;
     }
 
-    public static Purchase_Order__c createOrder(Id fanId, Id eventId, String status, 
+    public static Purchase_Order__c createOrder(Id fanId, Id eventId, String status,
                                                  Decimal subtotal, Decimal discount, Integer pointsUsed) {
         Purchase_Order__c order = new Purchase_Order__c(
             Fan__c = fanId,
@@ -150,8 +150,8 @@ public class TestDataFactory {
         return order;
     }
 
-    public static Season_Pass__c createSeasonPass(Id fanId, Id teamId, Id sectionId, String season, 
-                                                   Date startDate, Date endDate, String status, 
+    public static Season_Pass__c createSeasonPass(Id fanId, Id teamId, Id sectionId, String season,
+                                                   Date startDate, Date endDate, String status,
                                                    Decimal price, String paymentPlan) {
         Season_Pass__c pass = new Season_Pass__c(
             Fan__c = fanId,
@@ -169,7 +169,7 @@ public class TestDataFactory {
         return pass;
     }
 
-    public static Loyalty_Transaction__c createLoyaltyTransaction(Id fanId, Id orderId, String type, 
+    public static Loyalty_Transaction__c createLoyaltyTransaction(Id fanId, Id orderId, String type,
                                                                    Integer points, String reason) {
         Loyalty_Transaction__c trans = new Loyalty_Transaction__c(
             Fan__c = fanId,

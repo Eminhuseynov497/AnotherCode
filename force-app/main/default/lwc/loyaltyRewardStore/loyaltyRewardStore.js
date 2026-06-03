@@ -32,7 +32,7 @@ export default class LoyaltyRewardStore extends LightningElement {
     @api recordId;
     @track rewards = [];
     @track loading = true;
-    
+
     fanBalance = 0;
 
     @wire(getRecord, { recordId: '$recordId', fields: [LOYALTY_POINTS_FIELD] })
@@ -53,7 +53,7 @@ export default class LoyaltyRewardStore extends LightningElement {
 
     connectedCallback() {
         console.log('LoyaltyRewardStore: connectedCallback - recordId:', this.recordId);
-        
+
         this.rewards = TEST_REWARDS.map(reward => ({
             ...reward,
             Image_URL__c: IMAGE_MAP[reward.id] || '',

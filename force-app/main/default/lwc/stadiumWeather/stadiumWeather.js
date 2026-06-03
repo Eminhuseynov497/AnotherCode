@@ -17,9 +17,9 @@ export default class StadiumWeatherNew extends LightningElement {
         this.updateHostClass();
     }
 
-    @wire(getWeather, { 
-        stadiumId: '$recordId', 
-        stadiumName: '$stadiumName' 
+    @wire(getWeather, {
+        stadiumId: '$recordId',
+        stadiumName: '$stadiumName'
     })
     wiredWeather({ data, error }) {
         if (data) {
@@ -65,7 +65,6 @@ export default class StadiumWeatherNew extends LightningElement {
 
     updateHostClass() {
         this.classList.remove('temp-cold', 'temp-cool', 'temp-warm', 'temp-hot', 'temp-veryhot');
-        // Добавляем актуальный
         const cls = this.temperatureClass;
         if (cls) {
             this.classList.add(cls);

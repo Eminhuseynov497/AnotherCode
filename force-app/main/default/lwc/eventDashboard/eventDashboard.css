@@ -1,13 +1,10 @@
-/* Emerald Theme – Pleasant & Modern */
 
-/* Lightning Card background */
 lightning-card {
     --slds-c-card-color-background: #f0faf5;
     --slds-c-card-radius-border: 8px;
     --slds-c-card-shadow: 0 2px 8px rgba(0, 100, 50, 0.1);
 }
 
-/* KPI Cards */
 .kpi-card {
     background: linear-gradient(135deg, #2ecc71 0%, #1abc9c 100%);
     border-radius: 8px;
@@ -35,7 +32,6 @@ lightning-card {
     letter-spacing: 0.5px;
 }
 
-/* Section titles */
 .section-title {
     color: #1e7e5b;
     font-weight: 600;
@@ -48,7 +44,6 @@ lightning-card {
     color: #145a3f;
 }
 
-/* Progress bar */
 .section-progress {
     width: 100%;
     height: 22px;
@@ -73,7 +68,6 @@ lightning-card {
     color: #145a3f;
 }
 
-/* Table */
 .emerald-table {
     border-radius: 8px;
     overflow: hidden;
@@ -92,7 +86,6 @@ lightning-card {
     background-color: #d5f5e3;
 }
 
-/* Emerald Brand Button */
 .emerald-btn {
     --slds-c-button-brand-color-background: #2ecc71;
     --slds-c-button-brand-color-background-hover: #27ae60;

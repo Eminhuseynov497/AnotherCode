@@ -78,7 +78,6 @@ public with sharing class LoyaltyService {
         insert tx;
     }
 
-
     public static void awardAttendancePoints(Id eventId) {
         if (eventId == null) return;
 

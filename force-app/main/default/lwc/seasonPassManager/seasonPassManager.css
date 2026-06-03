@@ -10,7 +10,7 @@
     --slds-c-card-color-border: #a3e4d7;
     --slds-c-card-header-color-background: #48c9b0;
     --slds-c-card-header-text-color: white;
-    --slds-c-card-body-padding: 0; /* сохраним компактность */
+    --slds-c-card-body-padding: 0;
     --slds-c-card-shadow: 0 4px 12px rgba(72, 201, 176, 0.15);
     --slds-c-card-radius: 12px;
 }

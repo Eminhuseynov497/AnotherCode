@@ -14,12 +14,10 @@ export default class HotEventsTicker extends NavigationMixin(LightningElement) {
                 ...event,
                 formattedDate: this.formatDate(event.Date_Time__c)
             }));
-            // Создаём дублированный массив с уникальными ключами
             this.displayEvents = this.events.map((event, index) => ({
                 ...event,
                 uniqueKey: event.Id + '-' + index
             }));
-            // Добавляем копию с другими уникальными ключами
             this.displayEvents = [
                 ...this.displayEvents,
                 ...this.events.map((event, index) => ({

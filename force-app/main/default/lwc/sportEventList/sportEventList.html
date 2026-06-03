@@ -25,7 +25,7 @@
                         <template for:each={events} for:item="event">
                             <div key={event.Id} class="event-card" style="--status-color: {event.statusColor};">
                                 <div class="event-status-bar"></div>
-                                
+
                                 <div class="slds-card__body slds-p-horizontal_small slds-p-vertical_medium">
                                     <div class="teams-container">
                                         <div class="team">
@@ -55,8 +55,8 @@
                                             <span class="slds-text-body_small">Tickets sold</span>
                                             <span class="slds-text-body_small bold">{event.Tickets_Sold__c} / {event.Total_Tickets__c}</span>
                                         </div>
-                                        <div class="slds-progress-bar slds-progress-bar_circuit" 
-                                             aria-valuemin="0" aria-valuemax="100" 
+                                        <div class="slds-progress-bar slds-progress-bar_circuit"
+                                             aria-valuemin="0" aria-valuemax="100"
                                              aria-valuenow={event.soldPercent}
                                              style="--progress-width: {event.soldPercent}%;">
                                             <div class="slds-progress-bar__value custom-progress">
@@ -68,7 +68,7 @@
 
                                     <div class="slds-grid slds-grid_align-spread slds-m-top_medium">
                                         <lightning-badge label={event.badgeLabel} variant={event.badgeVariant}></lightning-badge>
-                                        <lightning-button variant="brand" label="Buy Ticket" 
+                                        <lightning-button variant="brand" label="Buy Ticket"
                                                           onclick={navigateToEvent} data-id={event.Id}
                                                           class="buy-btn"></lightning-button>
                                     </div>

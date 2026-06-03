@@ -6,12 +6,12 @@ public with sharing class TicketQRController {
         }
 
         List<Ticket__c> tickets = [SELECT Id, Seat_Label__c, Status__c, QR_Code__c,
-                                          Sport_Event__r.Name, 
-                                          Sport_Event__r.Date_Time__c, 
+                                          Sport_Event__r.Name,
+                                          Sport_Event__r.Date_Time__c,
                                           Sport_Event__r.Stadium__r.Name
-                                   FROM Ticket__c 
+                                   FROM Ticket__c
                                    WHERE Id = :ticketId LIMIT 1];
-        
+
         if (tickets.isEmpty()) {
             throw new AuraHandledException('Билет с таким ID не найден.');
         }

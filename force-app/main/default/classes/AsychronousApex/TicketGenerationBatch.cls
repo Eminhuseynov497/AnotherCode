@@ -29,7 +29,7 @@ public class TicketGenerationBatch implements Database.Batchable<SObject>, Datab
             SeasonPassService.reserveSeasonPassSeatsForNewEvents(eventIds);
         }
     }
-    
+
     public static Id runBatch(Set<Id> eventIds) {
         return Database.executeBatch(new TicketGenerationBatch(eventIds), 1);
     }

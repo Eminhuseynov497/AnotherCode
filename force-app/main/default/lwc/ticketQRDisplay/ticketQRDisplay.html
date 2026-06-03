@@ -5,7 +5,7 @@
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                     <div class="qr-container">
                         <img if:true={qrImageUrl} src={qrImageUrl} alt="Ticket QR Code" class="qr-image" />
-                        
+
                         <div if:true={showPlaceholder} class="qr-placeholder">
                             <p>No QR Code</p>
                             <lightning-button
@@ -15,10 +15,10 @@
                                 class="slds-m-top_small"
                             ></lightning-button>
                         </div>
-                        
+
                         <div if:true={isGenerating} class="qr-placeholder">
-                            <lightning-spinner 
-                                size="medium" 
+                            <lightning-spinner
+                                size="medium"
                                 alternative-text="Generating QR Code, please wait">
                             </lightning-spinner>
                             <p class="slds-m-top_xx-small">Generating...</p>

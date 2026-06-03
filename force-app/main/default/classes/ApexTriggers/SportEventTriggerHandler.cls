@@ -76,7 +76,6 @@ public with sharing class SportEventTriggerHandler {
         }
     }
 
-
     private static void enqueueTicketGenerationAndSeasonReservation(Set<Id> eventIds) {
         System.enqueueJob(new TicketGenerationQueueable(eventIds));
     }
@@ -92,7 +91,6 @@ public with sharing class SportEventTriggerHandler {
     private static void enqueueAttendancePoints(Id eventId) {
         System.enqueueJob(new AttendancePointsQueueable(eventId));
     }
-
 
     public class PriceRecalculationQueueable implements Queueable {
         private Set<Id> eventIds;

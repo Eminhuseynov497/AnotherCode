@@ -84,8 +84,6 @@ export default class FanLoyaltyWidget extends LightningElement {
         }
     }
 
-    
-
     renderedCallback() {
         const fill = this.template.querySelector('[data-element-id="progressFill"]');
         if (fill) {
@@ -134,7 +132,7 @@ export default class FanLoyaltyWidget extends LightningElement {
         const points = this.fan.Lifetime_Points__c || 0;
         return Math.max(nextThreshold - points, 0);
     }
-    
+
     getNextTier(currentTier) {
         const tiers = ['Bronze', 'Silver', 'Gold', 'Platinum'];
         const index = tiers.indexOf(currentTier);

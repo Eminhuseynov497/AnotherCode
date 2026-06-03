@@ -1,30 +1,11 @@
-/*
- * ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
- * Class Name      : SfAiAgentController
- * Author          : Abu Awaish
- * Created Date    : May 7, 2026
- * Last Modified By: Abu Awaish
- * Last Modified On: May 19, 2026
- * Description     : SF AI Agent — intent-aware routing, native org queries,
- *                   dynamic SOQL execution, OpenAI GPT-4 fallback.
- *                   Supports: object metadata, fields, children, picklists,
- *                   permission sets, profiles, roles, users, flows, apex classes,
- *                   record types, OWD, installed packages, custom objects.
- *
- */
 public with sharing class SfAiAgentController {
 
-    // ── Tooling API objects — cannot be queried via Database.query() ───────────
     private static final Set<String> TOOLING_ONLY_OBJECTS = new Set<String>{
         'validationrule', 'workflowrule', 'workflowalert', 'workflowfieldupdate',
         'workflowtask', 'workflowsend', 'workflowoutboundmessage',
         'apextriggermetadata', 'customfield', 'customobject',
         'layoutassignment', 'profilelayout', 'weblink', 'businessprocess'
     };
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // ENTRY POINT
-    // ══════════════════════════════════════════════════════════════════════════
 
     @AuraEnabled
     public static String askAgent(String prompt) {
@@ -33,22 +14,18 @@ public with sharing class SfAiAgentController {
                 throw new AuraHandledException('Prompt cannot be empty.');
             }
 
-            // 1. Code/explanation → GPT
             if (isCodeOrExplanationRequest(prompt)) {
                 return callOpenAIChat(prompt);
             }
 
-            // 2. Native org handlers
             String nativeResult = tryNativeOrgHandler(prompt);
             if (nativeResult != null) return nativeResult;
 
-            // 3. GPT generates SOQL → execute
             String soql = generateSoqlQuery(prompt);
             if (isValidSelectQuery(soql)) {
                 return executeSoqlAndFormat(soql);
             }
 
-            // 4. General GPT answer
             return callOpenAIChat(prompt);
 
         } catch (AuraHandledException ahe) {
@@ -58,10 +35,6 @@ public with sharing class SfAiAgentController {
             throw new AuraHandledException('Unexpected error: ' + e.getMessage());
         }
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // INTENT DETECTION
-    // ══════════════════════════════════════════════════════════════════════════
 
     private static Boolean isCodeOrExplanationRequest(String prompt) {
         String lp = prompt.toLowerCase();
@@ -83,7 +56,6 @@ public with sharing class SfAiAgentController {
                lp.contains('need soql');
     }
 
-    // ── Does the prompt want ONE specific record? ─────────────────────────────
     private static Boolean wantsSpecificRecord(String lp) {
         return lp.contains('detail')            || lp.contains('named ')           ||
                lp.contains('called ')           || lp.contains('equals')           ||
@@ -95,14 +67,9 @@ public with sharing class SfAiAgentController {
                lp.contains('\'');
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // NATIVE ORG HANDLER — priority-ordered routing
-    // ══════════════════════════════════════════════════════════════════════════
-
     private static String tryNativeOrgHandler(String prompt) {
         String lp = prompt.toLowerCase();
 
-        // ── PRIORITY 1 — Record/data fetch → SOQL generator ───────────────────
         Boolean isRecordFetch =
             lp.contains('top ')           || lp.contains('fetch ')        ||
             lp.contains('get me ')        || lp.contains('get top')       ||
@@ -114,7 +81,6 @@ public with sharing class SfAiAgentController {
             (lp.contains('show me ') && lp.contains('record'));
         if (isRecordFetch) return null;
 
-        // ── PRIORITY 2 — Current user info ────────────────────────────────────
         if (lp.contains('my username')   || lp.contains('who am i')      ||
             lp.contains('my email')      || lp.contains('my name')       ||
             lp.contains('current user')  || lp.contains('my user info')  ||
@@ -122,14 +88,12 @@ public with sharing class SfAiAgentController {
             return getCurrentUserInfo();
         }
 
-        // ── PRIORITY 3 — Picklist VALUES (dot notation) ───────────────────────
         if (lp.contains('.') &&
             (lp.contains('value') || lp.contains('lov') || lp.contains('option')) &&
             containsObjectName(lp)) {
             return getPicklistValues(prompt);
         }
 
-        // ── PRIORITY 4 — Picklist FIELDS on object ────────────────────────────
         Boolean asksPicklistFields =
             lp.contains('picklist field')     || lp.contains('picklist on')    ||
             lp.contains('picklist in')        || lp.contains('picklists on')   ||
@@ -140,7 +104,6 @@ public with sharing class SfAiAgentController {
             return getPicklistFields(prompt);
         }
 
-        // ── PRIORITY 5 — Children only ─────────────────────────────────────────
         if ((lp.contains('child object')       ||
              lp.contains('child relationship') ||
              lp.contains('children of')        ||
@@ -148,7 +111,6 @@ public with sharing class SfAiAgentController {
             return getObjectChildren(extractObjectName(prompt));
         }
 
-        // ── PRIORITY 6 — Full describe (fields + children) ────────────────────
         Boolean asksFullDescribe =
             lp.contains('describe ')    || lp.contains('full schema') ||
             lp.contains('object info')  || lp.contains('schema of')  ||
@@ -157,7 +119,6 @@ public with sharing class SfAiAgentController {
             return describeObject(extractObjectName(prompt));
         }
 
-        // ── PRIORITY 7 — Fields only (pure metadata) ──────────────────────────
         Boolean asksFieldsOnly =
             (lp.contains('all fields')        ||
              lp.contains('list fields')        ||
@@ -176,14 +137,12 @@ public with sharing class SfAiAgentController {
             return getObjectFields(extractObjectName(prompt));
         }
 
-        // ── PRIORITY 8 — OWD ──────────────────────────────────────────────────
         if (lp.contains('owd')              || lp.contains('org-wide')        ||
             lp.contains('org wide')         || lp.contains('sharing default') ||
             lp.contains('default sharing')  || lp.contains('sharing setting')) {
             return getOwdSettings();
         }
 
-        // ── PRIORITY 9 — Permission Set detail OR list ────────────────────────
         if (lp.contains('permission set') && !lp.contains('group')) {
             if (wantsSpecificRecord(lp)) return getPermissionSetDetail(prompt);
             if (lp.contains('list') || lp.contains('all') ||
@@ -191,21 +150,18 @@ public with sharing class SfAiAgentController {
                 return getPermissionSets();
         }
 
-        // ── PRIORITY 10 — Permission Set Group detail OR list ─────────────────
         if (lp.contains('permission set group') || lp.contains('psg')) {
             if (wantsSpecificRecord(lp)) return getPermissionSetGroupDetail(prompt);
             if (lp.contains('list') || lp.contains('all') || lp.contains('show'))
                 return getPermissionSetGroups();
         }
 
-        // ── PRIORITY 11 — Profile detail OR list ──────────────────────────────
         if (lp.contains('profile')) {
             if (wantsSpecificRecord(lp)) return getProfileDetail(prompt);
             if (lp.contains('list') || lp.contains('all') || lp.contains('show'))
                 return getProfiles();
         }
 
-        // ── PRIORITY 12 — User Role detail OR list ────────────────────────────
         if (lp.contains('user role') || lp.contains('user roles') ||
             lp.contains('all roles') || lp.contains('list roles') ||
             lp.contains('show roles') ||
@@ -219,39 +175,33 @@ public with sharing class SfAiAgentController {
                 return getUserRoles();
         }
 
-        // ── PRIORITY 13 — Custom objects ──────────────────────────────────────
         if ((lp.contains('custom object') || lp.contains('all object')) &&
             (lp.contains('list') || lp.contains('show') || lp.contains('all'))) {
             return listCustomObjects();
         }
 
-        // ── PRIORITY 14 — Installed packages ──────────────────────────────────
         if (lp.contains('installed package') || lp.contains('managed package')) {
             return getInstalledPackages();
         }
 
-        // ── PRIORITY 15 — Flow detail OR list ────────────────────────────────
         if (lp.contains('flow') && !lp.contains('soql') && !lp.contains('query')) {
             if (wantsSpecificRecord(lp)) return getFlowDetail(prompt);
             if (lp.contains('list') || lp.contains('all') || lp.contains('active'))
                 return getFlows();
         }
 
-        // ── PRIORITY 16 — Apex Class detail OR list ───────────────────────────
         if (lp.contains('apex class') || lp.contains('apex classes')) {
             if (wantsSpecificRecord(lp)) return getApexClassDetail(prompt);
             if (lp.contains('list') || lp.contains('all') || lp.contains('show'))
                 return getApexClasses();
         }
 
-        // ── PRIORITY 17 — Validation rules ───────────────────────────────────
         if (lp.contains('validation rule') &&
             (lp.contains('list') || lp.contains('show') || lp.contains('all') ||
              containsObjectName(lp))) {
             return getValidationRules(prompt);
         }
 
-        // ── PRIORITY 18 — Record Type detail OR list ──────────────────────────
         if (lp.contains('record type')) {
             if (wantsSpecificRecord(lp)) return getRecordTypeDetail(prompt);
             if (lp.contains('list') || lp.contains('show') || lp.contains('all') ||
@@ -259,7 +209,6 @@ public with sharing class SfAiAgentController {
                 return getRecordTypes(prompt);
         }
 
-        // ── PRIORITY 19 — User detail OR list ────────────────────────────────
         if (lp.contains('user') && !lp.contains('my') &&
             !lp.contains('user role') && !lp.contains('username')) {
             if (wantsSpecificRecord(lp)) return getUserDetail(prompt);
@@ -271,11 +220,6 @@ public with sharing class SfAiAgentController {
         return null;
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // ORG DATA METHODS
-    // ══════════════════════════════════════════════════════════════════════════
-
-    // ── Current user ──────────────────────────────────────────────────────────
     private static String getCurrentUserInfo() {
         User u = [
             SELECT Id, Name, Username, Email, Profile.Name,
@@ -296,7 +240,6 @@ public with sharing class SfAiAgentController {
              + '| **Org Name** | '   + UserInfo.getOrganizationName() + ' |';
     }
 
-    // ── Object fields only ────────────────────────────────────────────────────
     private static String getObjectFields(String objectName) {
         if (String.isBlank(objectName))
             return '❌ Please specify an object. Example: "Show fields on Contact"';
@@ -320,7 +263,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error: ' + e.getMessage(); }
     }
 
-    // ── Object child relationships only ───────────────────────────────────────
     private static String getObjectChildren(String objectName) {
         if (String.isBlank(objectName))
             return '❌ Please specify an object. Example: "Show child objects of Account"';
@@ -344,7 +286,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error: ' + e.getMessage(); }
     }
 
-    // ── Full describe (fields + children) ─────────────────────────────────────
     private static String describeObject(String objectName) {
         if (String.isBlank(objectName))
             return '❌ Could not detect object name. Try: "describe Account"';
@@ -382,7 +323,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error describing object: ' + e.getMessage(); }
     }
 
-    // ── OWD / Sharing ─────────────────────────────────────────────────────────
     private static String getOwdSettings() {
         try {
             List<String> objs = new List<String>{
@@ -409,7 +349,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error: ' + e.getMessage(); }
     }
 
-    // ── Permission Sets (list) ────────────────────────────────────────────────
     private static String getPermissionSets() {
         List<PermissionSet> ps = [
             SELECT Id, Label, Name, IsCustom, CreatedDate
@@ -425,14 +364,12 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Permission Set (detail) ───────────────────────────────────────────────
     private static String getPermissionSetDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
             if (String.isBlank(searchName))
                 return '❌ Please specify a name.\nExample: "Show details of permission set SF AI Agent User"';
 
-            // Exact match first
             List<PermissionSet> exact = [
                 SELECT Id, Label, Name, IsCustom, Description,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name,
@@ -444,7 +381,6 @@ public with sharing class SfAiAgentController {
             ];
             if (!exact.isEmpty()) return formatPermissionSetDetail(exact[0]);
 
-            // LIKE partial
             List<PermissionSet> partial = [
                 SELECT Id, Label, Name, IsCustom, Description,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name,
@@ -489,7 +425,6 @@ public with sharing class SfAiAgentController {
              + '| View All Data | '             + (ps.PermissionsViewAllData            ? '✅' : '❌') + ' |\n';
     }
 
-    // ── Permission Set Groups (list) ──────────────────────────────────────────
     private static String getPermissionSetGroups() {
         List<PermissionSetGroup> psg = [
             SELECT Id, MasterLabel, DeveloperName, Status FROM PermissionSetGroup ORDER BY MasterLabel LIMIT 50
@@ -501,14 +436,12 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Permission Set Group (detail) ─────────────────────────────────────────
     private static String getPermissionSetGroupDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
             if (String.isBlank(searchName))
                 return '❌ Please specify a name.\nExample: "Show details of permission set group Commerce_Shopper"';
 
-            // Exact match first (by DeveloperName)
             List<PermissionSetGroup> exact = [
                 SELECT Id, MasterLabel, DeveloperName, Description, Status,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name
@@ -516,7 +449,6 @@ public with sharing class SfAiAgentController {
             ];
             if (!exact.isEmpty()) return formatPSGDetail(exact[0]);
 
-            // LIKE partial
             List<PermissionSetGroup> partial = [
                 SELECT Id, MasterLabel, DeveloperName, Description, Status,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name
@@ -559,7 +491,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Profiles (list) ───────────────────────────────────────────────────────
     private static String getProfiles() {
         List<Profile> ps = [SELECT Id, Name, UserType FROM Profile ORDER BY Name LIMIT 50];
         String r = '## 👥 Profiles (' + ps.size() + ')\n\n| Name | User Type |\n|---|---|\n';
@@ -567,7 +498,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Profile (detail) ──────────────────────────────────────────────────────
     private static String getProfileDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
@@ -621,7 +551,6 @@ public with sharing class SfAiAgentController {
              + '| View All Data | '             + (p.PermissionsViewAllData            ? '✅' : '❌') + ' |\n';
     }
 
-    // ── User Roles (list) ─────────────────────────────────────────────────────
     private static String getUserRoles() {
         List<UserRole> roles = [SELECT Id, Name, DeveloperName, ParentRoleId FROM UserRole ORDER BY Name LIMIT 50];
         String r = '## 🏢 User Roles (' + roles.size() + ')\n\n| Name | API Name | Has Parent |\n|---|---|---|\n';
@@ -630,7 +559,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── User Role (detail) ────────────────────────────────────────────────────
     private static String getUserRoleDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
@@ -676,7 +604,6 @@ public with sharing class SfAiAgentController {
             + '| **Record ID** | `'          + r.Id + '` |\n';
     }
 
-    // ── Active Users (list) ───────────────────────────────────────────────────
     private static String getActiveUsers() {
         List<User> users = [
             SELECT Id, Name, Username, Profile.Name, LastLoginDate
@@ -690,7 +617,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── User (detail) ─────────────────────────────────────────────────────────
     private static String getUserDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
@@ -751,7 +677,6 @@ public with sharing class SfAiAgentController {
              + '| **Record ID** | `'        + u.Id + '` |\n';
     }
 
-    // ── Flows (list) ──────────────────────────────────────────────────────────
     private static String getFlows() {
         try {
             List<FlowDefinitionView> flows = [
@@ -768,14 +693,12 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error fetching flows: ' + e.getMessage(); }
     }
 
-    // ── Flow (detail) ─────────────────────────────────────────────────────────
     private static String getFlowDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
             if (String.isBlank(searchName))
                 return '❌ Please specify a flow name.\nExample: "Show details of flow MyFlow"';
 
-            // FlowDefinitionView does NOT support OR — two separate queries
             List<FlowDefinitionView> byLabel = new List<FlowDefinitionView>();
             List<FlowDefinitionView> byApi   = new List<FlowDefinitionView>();
             try {
@@ -823,7 +746,6 @@ public with sharing class SfAiAgentController {
                                            ? String.valueOf(f.LastModifiedDate).substring(0,10) : '—') + ' |\n';
     }
 
-    // ── Apex Classes (list) ───────────────────────────────────────────────────
     private static String getApexClasses() {
         List<ApexClass> classes = [SELECT Id, Name, Status, IsValid, LastModifiedDate FROM ApexClass ORDER BY Name LIMIT 100];
         String r = '## ⚙️ Apex Classes (' + classes.size() + ')\n\n| Name | Status | Valid | Last Modified |\n|---|---|---|---|\n';
@@ -834,14 +756,12 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Apex Class (detail) ───────────────────────────────────────────────────
     private static String getApexClassDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
             if (String.isBlank(searchName))
                 return '❌ Please specify a class name.\nExample: "Show details of Apex class SfAiAgentController"';
 
-            // Exact match first
             List<ApexClass> exact = [
                 SELECT Id, Name, Status, IsValid, ApiVersion, LengthWithoutComments, Body,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name, NamespacePrefix
@@ -849,7 +769,6 @@ public with sharing class SfAiAgentController {
             ];
             if (!exact.isEmpty()) return formatApexClassDetail(exact[0]);
 
-            // LIKE partial
             List<ApexClass> partial = [
                 SELECT Id, Name, Status, IsValid, ApiVersion, LengthWithoutComments, Body,
                        CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name, NamespacePrefix
@@ -883,7 +802,6 @@ public with sharing class SfAiAgentController {
              + '| **Record ID** | `'           + c.Id + '` |\n';
     }
 
-    // ── Picklist VALUES ───────────────────────────────────────────────────────
     private static String getPicklistValues(String prompt) {
         String objectName = extractObjectName(prompt);
         String fieldName  = extractFieldName(prompt);
@@ -905,7 +823,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error: ' + e.getMessage(); }
     }
 
-    // ── Picklist FIELDS ───────────────────────────────────────────────────────
     private static String getPicklistFields(String prompt) {
         String objectName = extractObjectName(prompt);
         if (String.isBlank(objectName))
@@ -933,7 +850,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) { return '❌ Error: ' + e.getMessage(); }
     }
 
-    // ── Custom Objects ────────────────────────────────────────────────────────
     private static String listCustomObjects() {
         List<EntityDefinition> objs = [
             SELECT QualifiedApiName, Label FROM EntityDefinition
@@ -946,7 +862,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Installed Packages ────────────────────────────────────────────────────
     private static String getInstalledPackages() {
         List<PackageLicense> pkgs = [SELECT AllowedLicenses, UsedLicenses, ExpirationDate, NamespacePrefix FROM PackageLicense ORDER BY NamespacePrefix];
         if (pkgs.isEmpty()) return '📋 No installed managed packages found.';
@@ -957,7 +872,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Validation Rules ──────────────────────────────────────────────────────
     private static String getValidationRules(String prompt) {
         String objectName = extractObjectName(prompt);
         String q = 'SELECT Id, ValidationName, Active, ErrorMessage, EntityDefinition.QualifiedApiName\n'
@@ -974,7 +888,6 @@ public with sharing class SfAiAgentController {
              + EncodingUtil.urlEncode(q.replaceAll('\n', ' '), 'UTF-8') + '\n```';
     }
 
-    // ── Record Types (list) ───────────────────────────────────────────────────
     private static String getRecordTypes(String prompt) {
         String objectName = extractObjectName(prompt);
         String soql = 'SELECT Id, Name, DeveloperName, SobjectType, IsActive FROM RecordType';
@@ -990,7 +903,6 @@ public with sharing class SfAiAgentController {
         return r;
     }
 
-    // ── Record Type (detail) ──────────────────────────────────────────────────
     private static String getRecordTypeDetail(String prompt) {
         try {
             String searchName = extractQuotedOrKeywordValue(prompt);
@@ -1036,15 +948,10 @@ public with sharing class SfAiAgentController {
              + '| **Record ID** | `'         + rt.Id + '` |\n';
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // SOQL EXECUTION
-    // ══════════════════════════════════════════════════════════════════════════
-
     private static String executeSoqlAndFormat(String query) {
         try {
             String lower = query.trim().toLowerCase();
 
-            // Tooling API guard
             for (String toolingObj : TOOLING_ONLY_OBJECTS) {
                 if (lower.contains('from ' + toolingObj)) {
                     String disp = toolingObj.substring(0,1).toUpperCase() + toolingObj.substring(1);
@@ -1054,20 +961,17 @@ public with sharing class SfAiAgentController {
                 }
             }
 
-            // COUNT
             if (lower.startsWith('select count(')) {
                 Integer total = Database.countQuery(query);
                 return '## 📊 Count Result\n\n```soql\n' + query + '\n```\n\n**Total Records:** ' + total;
             }
 
-            // Subquery detection
             Boolean hasSubquery = query.indexOf('(') > 0
                 && query.indexOf('(') < query.lastIndexOf(')')
                 && lower.contains('select')
                 && lower.indexOf('select') != lower.lastIndexOf('select');
             if (hasSubquery) return executeSubqueryAndFormat(query);
 
-            // Standard flat query
             List<SObject> records = Database.query(query);
             if (records.isEmpty())
                 return '## 🔍 No Records Found\n\n```soql\n' + query + '\n```\n\n*No records matched your criteria.*';
@@ -1092,7 +996,6 @@ public with sharing class SfAiAgentController {
         } catch (Exception e) {
             String errMsg = e.getMessage() != null ? e.getMessage() : 'Unknown error';
 
-            // Invalid field → show valid fields
             if (errMsg.contains('No such column') || errMsg.contains('no such column')) {
                 String objectName = extractObjectNameFromQuery(query);
                 String fieldHelp  = '';
@@ -1116,7 +1019,6 @@ public with sharing class SfAiAgentController {
                      + '```soql\n' + query + '\n```' + fieldHelp;
             }
 
-            // Tooling API
             if (errMsg.contains('is not supported')) {
                 return '## ⚠️ Unsupported Object\n\n❌ ' + errMsg + '\n\n'
                      + 'This object requires **Tooling API**.\n\n'
@@ -1192,10 +1094,6 @@ public with sharing class SfAiAgentController {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // OPENAI HELPERS
-    // ══════════════════════════════════════════════════════════════════════════
-
     private static String generateSoqlQuery(String prompt) {
         String sp = getSoqlSystemPrompt();
         return stripCodeFences(callOpenAI(sp, prompt, 400, 0.0)).trim();
@@ -1218,10 +1116,10 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
     body.put('messages',    msgs);
 
     HttpRequest req = new HttpRequest();
-    req.setEndpoint('callout:OpenAI_API/chat/completions');          // ← изменено
+    req.setEndpoint('callout:OpenAI_API/chat/completions');
     req.setMethod('POST');
     req.setHeader('Content-Type', 'application/json');
-    req.setHeader('Authorization', 'Bearer {!$Credential.OpenAI_API.apiKey}'); // ← изменено
+    req.setHeader('Authorization', 'Bearer {!$Credential.OpenAI_API.apiKey}');
     req.setTimeout(120000);
     req.setBody(JSON.serialize(body));
 
@@ -1238,10 +1136,6 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
     if (msg == null) throw new AuraHandledException('Null message from OpenAI.');
     return (String) msg.get('content');
 }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // UTILITIES
-    // ══════════════════════════════════════════════════════════════════════════
 
     private static Boolean containsObjectName(String lp) {
         return lp.contains('account')     || lp.contains('contact')      ||
@@ -1291,12 +1185,11 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
     }
 
     private static String extractQuotedOrKeywordValue(String prompt) {
-        // Step 1 — Quoted value wins always
+
         Pattern quoted = Pattern.compile('["\']([^"\']+)["\']');
         Matcher qm = quoted.matcher(prompt);
         if (qm.find()) return qm.group(1).trim();
 
-        // Step 2 — Specific multi-word keyword phrases (safe to take full remainder)
         String lp = prompt.toLowerCase();
         List<String> specificKeywords = new List<String>{
             'name equals ','name = ','whose name is ','whose name ',
@@ -1315,7 +1208,6 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
             }
         }
 
-        // Step 3 — Generic single-word keywords (take first CamelCase/underscore token)
         List<String> genericKeywords = new List<String>{
             'apex class ','apex classes ',
             'permission set group ','permission set ',
@@ -1328,9 +1220,9 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
                 String remainder = prompt.substring(idx + kw.length()).trim()
                                          .replaceAll('[?!.]$','').trim();
                 if (String.isNotBlank(remainder)) {
-                    // No spaces → clean single name
+
                     if (!remainder.contains(' ')) return remainder;
-                    // First word looks like a name (CamelCase or has underscore)
+
                     String firstWord = remainder.split('\\s+')[0];
                     if (firstWord.length() > 2 &&
                         (Pattern.matches('[A-Z]', firstWord.substring(0, 1)) || firstWord.contains('_'))) {
@@ -1387,10 +1279,6 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
         return r;
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // SYSTEM PROMPTS (ARENAHUB AWARE)
-    // ══════════════════════════════════════════════════════════════════════════
-    
     private static String getSystemPrompt() {
         return 'You are an expert Salesforce AI Agent. Be concise and production-ready.\n'
              + 'Format ALL code in fenced blocks: ```apex ```soql ```javascript ```html\n'
@@ -1411,12 +1299,11 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
 
     private static String getArenaHubSchemaPrompt() {
     return '\n=== ARENAHUB FULL PROJECT CONTEXT ===\n'
-         // ── Бизнес-контекст ────────────────────────────
+
          + 'You are an intelligent assistant for the ArenaHub sports ticketing platform built on Salesforce.\n'
          + 'The system manages stadiums, teams, leagues, sport events, ticket inventory, season passes, and fan loyalty.\n'
          + 'It supports dynamic pricing, seat reservations, checkout, check-in, and loyalty accrual.\n\n'
-         
-         // ── Объекты и поля ─────────────────────────────
+
          + '--- Custom Objects (ArenaHub) ---\n'
          + 'Sport__c (sport category): Name, League__c, Icon__c, Is_Active__c\n'
          + 'League__c (sports league): Name, Country__c, Season__c, Is_Active__c, Logo_URL__c, Sport__c (lookup to Sport__c)\n'
@@ -1429,8 +1316,7 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
          + 'Fan__c (registered fan): First_Name__c, Last_Name__c, Email__c (unique), Phone__c, Date_of_Birth__c, City__c, Registration_Date__c, Loyalty_Tier__c (picklist: Bronze, Silver, Gold, Platinum), Loyalty_Points_Balance__c, Lifetime_Points__c, Total_Spend__c (roll-up from Purchase_Order__c), Events_Attended__c, Preferred_Category__c, Last_Birthday_Bonus_Date__c, Loyalty_Season__c, Favorite_Team__c (lookup to Team__c)\n'
          + 'Season_Pass__c (season subscription): Season__c, Start_Date__c, End_Date__c, Preferred_Row__c, Preferred_Seats__c, Season_Pass_Price__c, Payment_Plan__c (picklist: Full, Monthly), Status__c (picklist: Active, Suspended, Expired, Cancelled), Auto_Renew__c, Renewal_Reminder_Sent__c, Fan__c (lookup), Team__c (lookup), Stadium_Section__c (lookup)\n'
          + 'Loyalty_Transaction__c (points earned/redeemed): Type__c (picklist: Earned, Redeemed, Expired, Adjustment), Points__c, Reason__c (picklist: Purchase, Attendance, Birthday Bonus, Redemption, Admin Adjustment), Transaction_Date__c, Balance_After__c (stored number), Fan__c (master-detail), Purchase_Order__c (lookup)\n'
-         
-         // ── Бизнес-правила (кратко) ────────────────────
+
          + '\n--- Key Business Rules ---\n'
          + 'Dynamic Pricing: Dynamic_Price__c = Base_Price__c * Event_Price_Multiplier__c * Demand_Factor * Time_Factor.\n'
          + '  Demand Factor: based on section sold percent (<50%:1.0, 50-69%:1.1, 70-84%:1.2, >=85%:1.35)\n'
@@ -1442,8 +1328,7 @@ private static String callOpenAI(String systemPrompt, String userPrompt,
          + 'Tickets can be reserved (15 min), then confirmed or released.\n'
          + 'Season Pass reserves seats on all future home events of the team in the given season.\n'
          + 'Order.Confirmation_Email_Sent__c is set by flow after confirmation.\n\n'
-         
-         // ── Дополнительные подсказки для SOQL ──────────
+
          + '--- SOQL Generation Tips ---\n'
          + '- Always use exact API names of objects and fields as shown above.\n'
          + '- For lookups: use e.g. Fan__r.Name, Home_Team__r.Name, Away_Team__r.Name, Stadium__r.Name, etc.\n'

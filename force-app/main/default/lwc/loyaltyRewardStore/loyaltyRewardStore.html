@@ -38,7 +38,7 @@
                                     <h3 class="slds-text-heading_small slds-truncate" title={reward.Name}>
                                         {reward.Name}
                                     </h3>
-                                    
+
                                     <div style="margin-top: 28px; margin-bottom: 24px;">
                                         <lightning-button
                                             label="Buy"
@@ -50,14 +50,14 @@
                                             disabled={reward.isDisabled}
                                         ></lightning-button>
                                     </div>
-                                    
-                                    <p if:true={reward.isDisabled} 
-                                       class="slds-text-color_error slds-text-body_small" 
+
+                                    <p if:true={reward.isDisabled}
+                                       class="slds-text-color_error slds-text-body_small"
                                        style="white-space: nowrap; margin-top: 0px;">
                                         {reward.disabledReason}
                                     </p>
                                 </div>
-                                
+
                                 <div class="slds-col slds-size_1-of-2 slds-text-align_right">
                                     <div class="slds-m-bottom_xxx-small">
                                         <span class="slds-badge slds-theme_info">{reward.Category__c}</span>

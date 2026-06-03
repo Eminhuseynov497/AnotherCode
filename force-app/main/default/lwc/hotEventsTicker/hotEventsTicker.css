@@ -2,7 +2,7 @@
     overflow: hidden;
     white-space: nowrap;
     padding: 1rem 0;
-    background: linear-gradient(135deg, #d4f4e8 0%, #b6e9d9 100%); /* мягкий мятный фон */
+    background: linear-gradient(135deg, #d4f4e8 0%, #b6e9d9 100%);
     border-radius: 0.75rem;
     position: relative;
     box-shadow: 0 4px 12px rgba(72, 201, 176, 0.1);

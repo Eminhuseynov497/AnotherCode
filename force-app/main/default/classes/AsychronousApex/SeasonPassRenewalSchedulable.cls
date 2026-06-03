@@ -11,7 +11,7 @@ public with sharing class SeasonPassRenewalSchedulable implements Schedulable {
             FROM Season_Pass__c
             WHERE Status__c = 'Active' AND End_Date__c <= :today
         ];
-        
+
         if (!toExpire.isEmpty()) {
             for (Season_Pass__c sp : toExpire) {
                 sp.Status__c = 'Expired';
@@ -25,7 +25,7 @@ public with sharing class SeasonPassRenewalSchedulable implements Schedulable {
 
     private void sendRenewalReminders(Date today) {
         Date reminderDate = today.addDays(30);
-        
+
         List<Season_Pass__c> reminders = [
             SELECT Id, Fan__r.Email__c, Fan__r.First_Name__c, Team__r.Name, End_Date__c
             FROM Season_Pass__c
@@ -33,7 +33,7 @@ public with sharing class SeasonPassRenewalSchedulable implements Schedulable {
               AND Auto_Renew__c = false
               AND End_Date__c = :reminderDate
         ];
-        
+
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         for (Season_Pass__c sp : reminders) {
             if (String.isNotBlank(sp.Fan__r.Email__c)) {
@@ -41,7 +41,7 @@ public with sharing class SeasonPassRenewalSchedulable implements Schedulable {
                 mail.setToAddresses(new String[] { sp.Fan__r.Email__c });
                 mail.setSubject('Season Pass Renewal Reminder');
                 String body = 'Dear ' + sp.Fan__r.First_Name__c + ',\n\n'
-                            + 'Your season pass for ' + sp.Team__r.Name + ' will expire on ' 
+                            + 'Your season pass for ' + sp.Team__r.Name + ' will expire on '
                             + sp.End_Date__c.format() + '.\n'
                             + 'Please renew it before it expires to continue enjoying benefits.\n\n'
                             + 'Thank you,\nArenaHub';
@@ -49,7 +49,7 @@ public with sharing class SeasonPassRenewalSchedulable implements Schedulable {
                 emails.add(mail);
             }
         }
-        
+
         if (!emails.isEmpty()) {
             Messaging.sendEmail(emails);
         }

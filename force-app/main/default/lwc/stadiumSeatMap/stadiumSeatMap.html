@@ -1,7 +1,6 @@
 <template>
   <lightning-card title="Select Your Seats">
     <div class="slds-p-around_x-small">
-      <!-- Ошибка -->
       <template if:true={errorMessage}>
         <div class="slds-box slds-box_alert slds-theme_alert-texture slds-text-color_error slds-m-bottom_x-small">
           <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
@@ -9,12 +8,10 @@
         </div>
       </template>
 
-      <!-- Спиннер загрузки -->
       <template if:true={loading}>
         <lightning-spinner alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
       </template>
 
-      <!-- Секции — горизонтальная строка -->
       <template if:true={sections.length}>
         <div class="section-grid slds-m-bottom_x-small">
           <template for:each={sections} for:item="section">
@@ -39,7 +36,6 @@
         </div>
       </template>
 
-      <!-- Сетка мест выбранной секции -->
       <template if:true={selectedSectionId}>
         <div class="slds-m-top_x-small">
           <h2 class="slds-text-heading_small slds-m-bottom_x-small">Section: {selectedSectionName}</h2>
@@ -64,7 +60,6 @@
         </div>
       </template>
 
-      <!-- Корзина -->
       <template if:true={cartSeats.length}>
         <div class="cart-summary">
           <div class="slds-m-bottom_xx-small slds-text-heading_small">
@@ -84,7 +79,6 @@
             <div class="reserve-timer">Reserved until {reservationEndTime}</div>
           </template>
 
-          <!-- Кнопки Reserve (бирюзовая) и Refresh -->
           <div class="action-buttons-container">
             <lightning-button variant="brand" label="Reserve" onclick={handleReserve} disabled={reserveDisabled}
                               class="reserve-btn"></lightning-button>

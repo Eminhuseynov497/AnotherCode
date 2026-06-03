@@ -1,7 +1,6 @@
 <template>
   <div class="agent-shell">
 
-    <!-- ═══ SIDEBAR ═══ -->
     <div class="sidebar">
 
       <div class="sidebar-header">
@@ -73,12 +72,9 @@
       </div>
 
     </div>
-    <!-- ═══ END SIDEBAR ═══ -->
 
-    <!-- ═══ MAIN CHAT ═══ -->
     <div class="main">
 
-      <!-- Header -->
       <div class="chat-header">
         <div class="header-left">
           <div class="header-bot-avatar">
@@ -109,13 +105,11 @@
         </div>
       </div>
 
-      <!-- Messages -->
       <div class="messages" lwc:ref="messageContainer">
 
         <template for:each={messages} for:item="msg">
           <div key={msg.id} class={msg.wrapperClass}>
 
-            <!-- Avatar -->
             <div class={msg.avatarClass}>
               <template if:true={msg.isAi}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
@@ -134,7 +128,6 @@
               </template>
             </div>
 
-            <!-- Bubble -->
             <div class={msg.bubbleClass}>
               <template if:true={msg.isHtml}>
                 <div class="msg-content" lwc:dom="manual" data-id={msg.id}></div>
@@ -148,7 +141,6 @@
           </div>
         </template>
 
-        <!-- Thinking indicator -->
         <template if:true={isThinking}>
           <div class="msg ai">
             <div class="msg-avatar ai">
@@ -170,9 +162,7 @@
         </template>
 
       </div>
-      <!-- end .messages -->
 
-      <!-- Suggestion chips -->
       <div class="chip-row">
         <template for:each={chips} for:item="chip">
           <button key={chip.id} class="chip" data-prompt={chip.prompt}
@@ -180,7 +170,6 @@
         </template>
       </div>
 
-      <!-- Input area -->
       <div class="input-area">
         <div class="input-wrap">
           <div class="input-icon">
@@ -209,8 +198,6 @@
       </div>
 
     </div>
-    <!-- ═══ END MAIN ═══ -->
 
   </div>
-  <!-- ═══ END agent-shell ═══ -->
 </template>

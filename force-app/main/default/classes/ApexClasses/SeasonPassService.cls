@@ -1,12 +1,5 @@
 public with sharing class SeasonPassService {
 
-    /**
-     * @param teamId
-     * @param sectionId
-     * @param season
-     * @param paymentPlan
-     * @return цена абонемента
-     */
     public static Decimal calculateSeasonPassPrice(Id teamId, Id sectionId, String season, String paymentPlan) {
         if (teamId == null || sectionId == null || String.isBlank(season)) {
             return 0.0;
@@ -35,9 +28,6 @@ public with sharing class SeasonPassService {
         return (totalBasePrice * planMultiplier).setScale(2, System.RoundingMode.HALF_UP);
     }
 
-    /**
-     * @param seasonPassId
-     */
     public static void reserveFutureSeasonPassSeats(Id seasonPassId) {
         if (seasonPassId == null) return;
 
@@ -68,9 +58,6 @@ public with sharing class SeasonPassService {
         reserveSeatsForEvents(sp, eventIds);
     }
 
-    /**
-     * @param seasonPassId ID Season_Pass__c
-     */
     public static void releaseFutureSeasonPassSeats(Id seasonPassId) {
         if (seasonPassId == null) return;
 
@@ -102,9 +89,6 @@ public with sharing class SeasonPassService {
         }
     }
 
-    /**
-     * @param eventIds Set из ID новых Sport_Event__c
-     */
     public static void reserveSeasonPassSeatsForNewEvents(Set<Id> eventIds) {
         if (eventIds == null || eventIds.isEmpty()) return;
 
@@ -176,7 +160,7 @@ public with sharing class SeasonPassService {
 
     private static void reserveSeatsForEvent(Season_Pass__c sp, Id eventId) {
         Sport_Event__c evt = [SELECT Id, Date_Time__c FROM Sport_Event__c WHERE Id = :eventId];
-        
+
         Integer seatsNeeded = 1;
         if (sp.Preferred_Seats__c != null) {
             try {

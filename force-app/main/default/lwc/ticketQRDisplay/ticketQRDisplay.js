@@ -71,7 +71,7 @@ export default class TicketQRDisplay extends LightningElement {
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-            
+
             const blob = await response.blob();
             const reader = new FileReader();
             reader.readAsDataURL(blob);

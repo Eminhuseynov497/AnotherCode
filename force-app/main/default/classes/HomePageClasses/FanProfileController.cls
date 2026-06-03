@@ -1,9 +1,9 @@
 public with sharing class FanProfileController {
-    
+
     @AuraEnabled(cacheable=true)
     public static FanData getFanData(String fanId) {
         FanData result = new FanData();
-        
+
         Fan__c fan = [
             SELECT Id, Name, Loyalty_Tier__c, Loyalty_Points_Balance__c, Lifetime_Points__c,
                    Total_Spend__c, Registration_Date__c
@@ -12,7 +12,7 @@ public with sharing class FanProfileController {
             LIMIT 1
         ];
         result.fan = fan;
-        
+
         Integer futureEventsCount = [
             SELECT COUNT()
             FROM Ticket__c
@@ -21,7 +21,7 @@ public with sharing class FanProfileController {
               AND Sport_Event__r.Date_Time__c > TODAY
         ];
         result.futureEventsCount = futureEventsCount;
-        
+
         result.recentOrders = [
             SELECT Id, Order_Number__c, Total_Amount__c, Status__c, Order_Date__c
             FROM Purchase_Order__c
@@ -29,7 +29,7 @@ public with sharing class FanProfileController {
             ORDER BY Order_Date__c DESC
             LIMIT 5
         ];
-        
+
         result.loyaltyTransactions = [
             SELECT Id, Type__c, Points__c, Reason__c, Transaction_Date__c
             FROM Loyalty_Transaction__c
@@ -37,7 +37,7 @@ public with sharing class FanProfileController {
             ORDER BY Transaction_Date__c DESC
             LIMIT 5
         ];
-        
+
         result.activeSeasonPasses = [
             SELECT Id, Team__r.Name, Season__c, Payment_Plan__c
             FROM Season_Pass__c
@@ -45,10 +45,10 @@ public with sharing class FanProfileController {
             ORDER BY End_Date__c DESC
             LIMIT 5
         ];
-        
+
         return result;
     }
-    
+
     @AuraEnabled(cacheable=true)
     public static String getFanIdFromSeasonPass(String seasonPassId) {
         Season_Pass__c sp = [
@@ -59,7 +59,7 @@ public with sharing class FanProfileController {
         ];
         return sp.Fan__c;
     }
-    
+
     @AuraEnabled(cacheable=true)
     public static Fan__c getFanForCurrentUser() {
         User currentUser = [SELECT Id, Email FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
@@ -75,7 +75,7 @@ public with sharing class FanProfileController {
         ];
         return fans.isEmpty() ? null : fans[0];
     }
-    
+
     public class FanData {
         @AuraEnabled public Fan__c fan;
         @AuraEnabled public Integer futureEventsCount;

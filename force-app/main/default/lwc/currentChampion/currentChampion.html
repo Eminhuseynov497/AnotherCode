@@ -9,7 +9,7 @@
                 <div class="slds-media__figure logo-wrapper">
                     <img if:true={hasLogo} src={champion.teamLogoUrl} alt={champion.teamName}
                          width="80" height="80" class="team-logo" />
-                    
+
                     <div if:false={hasLogo} class="initials-circle" style={initialsStyle}>
                         <span class="initials-text">{teamInitials}</span>
                     </div>

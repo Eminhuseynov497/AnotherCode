@@ -1,8 +1,5 @@
 public with sharing class RefundService {
 
-    /**
-     * @param orderId ID заказа
-     */
     public static void cancelOrder(Id orderId) {
         if (orderId == null) return;
 
@@ -41,9 +38,6 @@ public with sharing class RefundService {
         TicketInventoryService.updateEventAvailabilityStatus(new Set<Id>{order.Sport_Event__c});
     }
 
-    /**
-     * @param eventId
-     */
     public static void processEventCancellation(Id eventId) {
         if (eventId == null) return;
 
@@ -77,9 +71,6 @@ public with sharing class RefundService {
         TicketInventoryService.updateEventAvailabilityStatus(new Set<Id>{eventId});
     }
 
-    /**
-     * @param orderId
-     */
     public static void restoreRedeemedPoints(Id orderId) {
         if (orderId == null) return;
 

@@ -1,5 +1,4 @@
 :host {
-  /* Горчичная палитра */
   --section-card-bg: #fdfaf5;
   --section-card-border: #e8dcc8;
   --section-card-shadow: 0 1px 4px rgba(120, 90, 30, 0.05);
@@ -38,7 +37,6 @@
   --error-text: #a3402c;
 }
 
-/* ===== КАРТОЧКА СЕКЦИИ — ЧУТЬ БОЛЬШЕ ===== */
 .section-card {
   background: var(--section-card-bg);
   border: 1px solid var(--section-card-border);
@@ -46,8 +44,7 @@
   padding: 8px 14px;
   box-shadow: var(--section-card-shadow);
   transition: all 0.2s ease;
-  
-  /* Горизонтальное расположение всех элементов */
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -98,7 +95,6 @@
   font-weight: 600;
 }
 
-/* ===== КНОПКА «SELECT» — ЧУТЬ БОЛЬШЕ ===== */
 .select-seats-btn {
   width: auto !important;
   min-width: 60px !important;
@@ -129,16 +125,13 @@
   border-color: var(--price-color) !important;
 }
 
-/* ===== КНОПКА RESERVE — БИРЮЗОВАЯ, БЕЗ ГРАДИЕНТА ===== */
 .reserve-btn {
   --sds-c-button-brand-color-background: #008080 !important;
   --sds-c-button-brand-color-background-hover: #006666 !important;
   --sds-c-button-brand-text-color: #ffffff !important;
 
-  /* Сплошной цвет, без градиента */
   background: #008080 !important;
-  
-  /* Без тени и выделения */
+
   box-shadow: none !important;
   border: 1px solid #006666 !important;
 
@@ -156,7 +149,6 @@
   box-shadow: none !important;
 }
 
-/* ===== КНОПКА REFRESH ===== */
 .refresh-btn {
   --sds-c-button-neutral-color-border: #d6c5a8 !important;
   --sds-c-button-neutral-color-background: transparent !important;
@@ -176,7 +168,6 @@
   border-color: var(--price-color) !important;
 }
 
-/* ===== СЕТКА МЕСТ ===== */
 .seat-grid {
   display: flex;
   flex-direction: column;
@@ -258,7 +249,6 @@
   cursor: not-allowed;
 }
 
-/* ===== КОРЗИНА ===== */
 .cart-summary {
   background: var(--cart-bg);
   border: 1px solid var(--cart-border);
@@ -307,7 +297,6 @@
   margin-top: 2px;
 }
 
-/* ===== БЛОК КНОПОК В КОРЗИНЕ ===== */
 .action-buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -315,7 +304,6 @@
   margin-top: 6px;
 }
 
-/* ===== ГОРИЗОНТАЛЬНАЯ СТРОКА СЕКЦИЙ ===== */
 .section-grid {
   display: flex;
   flex-wrap: nowrap;
@@ -332,7 +320,6 @@
   border-radius: 4px;
 }
 
-/* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 768px) {
   .section-card {
     padding: 6px 10px;
